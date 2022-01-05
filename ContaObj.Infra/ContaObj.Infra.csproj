@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ContaObj.Application\ContaObj.Application.csproj" />
     <ProjectReference Include="..\ContaObj.Domain\ContaObj.Domain.csproj" />
   </ItemGroup>
 

@@ -1,4 +1,4 @@
-﻿namespace ContaObj.Domain.Model;
+﻿namespace ContaObj.Domain.Enumerations;
 
 public enum TipoTransacao
 {

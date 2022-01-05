@@ -1,5 +1,10 @@
 ﻿using ContaObj.Infra.Database;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation.AspNetCore;
+using ContaObj.Application.Validators;
+using ContaObj.Application.Mappings;
+using ContaObj.Infra.Repositories;
+using ContaObj.Application.Interfaces;
 
 namespace ContaObj.Api;
 
@@ -14,7 +19,19 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddControllers();
+        services.AddControllers().AddFluentValidation(p =>
+        {
+            p.RegisterValidatorsFromAssemblyContaining<NovoClienteValidator>();
+        });
+
+        services.AddAutoMapper(
+            typeof(ClienteViewModelMappingProfile));
+
+        services.AddScoped<IClienteRepository, ClienteRepository>();
+
+        //TODO fazer arquivos de configuração
+        //TODO Configurar services e automappers em classe separada
+
         services.AddDbContext<ContaObjContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ContaObjDb")));
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();

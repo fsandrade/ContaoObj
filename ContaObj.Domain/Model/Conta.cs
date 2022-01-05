@@ -1,4 +1,6 @@
-﻿namespace ContaObj.Domain.Model;
+﻿using ContaObj.Domain.Enumerations;
+
+namespace ContaObj.Domain.Model;
 
 public class Conta
 {
@@ -9,4 +11,5 @@ public class Conta
 
     public Cliente Cliente { get; set; }
     public Agencia Agencia { get; set; }
+    public StatusConta Status { get; set; }
 }

@@ -1,4 +1,5 @@
-﻿using ContaObj.Domain.ViewModel;
+﻿using ContaObj.Application.Interfaces;
+using ContaObj.Domain.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ContaObj.Api.Controllers
@@ -7,26 +8,57 @@ namespace ContaObj.Api.Controllers
     [ApiController]
     public class ClientesController : ControllerBase
     {
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IClienteManager clienteManager;
+
+        public ClientesController(IClienteManager clienteManager)
         {
-            return new string[] { "value1", "value2" };
+            this.clienteManager = clienteManager;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ClienteViewModel>>> Get()
+        {
+            var clientes = await clienteManager.GetClientesAsync();
+
+            if (clientes.Any())
+            {
+                return Ok(clientes);
+            }
+
+            return NotFound();
         }
 
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<ClienteViewModel>> Get(int id)
         {
-            return "value";
+            var cliente = await clienteManager.GetClienteAsync(id);
+
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(cliente);
         }
 
         [HttpPost]
-        public void Post(NovoCliente cliente)
+        public async Task<ActionResult<ClienteViewModel>> Post(NovoCliente novoCliente)
         {
+            ClienteViewModel clienteInserido = await clienteManager.InsertClienteAsync(novoCliente);
+            return CreatedAtAction(nameof(Get), new { id = clienteInserido.Id }, clienteInserido);
         }
 
         [HttpPut("{id}")]
-        public void Put(cliente)
+        public async Task<IActionResult> Put(AlteraCliente alteraCliente)
         {
+            var clienteAlterado = await clienteManager.UpdateClienteAsync(alteraCliente);
+
+            if(clienteAlterado == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(clienteAlterado);
         }
 
         [HttpDelete("{id}")]
