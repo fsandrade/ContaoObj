@@ -13,6 +13,10 @@ public class Cliente
     public Endereco Endereco { get; set; }
     public List<Telefone> Telefones { get; set; }
     public StatusCliente Status { get; set; }
-
     public List<Conta> Contas { get; set; }
+
+    public void Inativar()
+    {
+        Status = StatusCliente.Inativo;
+    }
 }

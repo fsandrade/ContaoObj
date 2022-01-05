@@ -31,7 +31,7 @@ public class Startup
         //TODO fazer arquivos de configuração
         //TODO Configurar services e automappers em classe separada
 
-        services.AddDbContext<ContaObjContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ContaObjDb")));
+        services.AdicionarConfiguracaoDatabase(Configuration);
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
     }
@@ -49,5 +49,7 @@ public class Startup
         app.UseAuthorization();
 
         app.MapControllers();
+
+        app.UsarConfiguracaoDatabase();
     }
 }
