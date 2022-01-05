@@ -35,34 +35,34 @@ namespace ContaObj.Infra.Repositories
 
         public async Task<IEnumerable<Transacao>> ExtratoPorPeriodoAsync(int contaId, DateTime inicio, DateTime fim)
         {
-            return await context.Transacoes
+            return await context.Transacoe
                 .Where(x => (x.Origem.Id == contaId || x.Destino.Id == contaId) && x.Data >= inicio && x.Data <= fim)
                 .ToListAsync();
         }
 
         public async Task<Conta> GetContaAsync(int contaId)
         {
-            return await context.Contas
+            return await context.Conta
                 .FindAsync(contaId);
         }
 
         public async Task<IEnumerable<Conta>> GetContasAsync()
         {
-            return await context.Contas
+            return await context.Conta
                 .AsNoTracking()
                 .ToListAsync();
         }
 
         public async Task<IEnumerable<Conta>> GetContasPorClienteAsync(int clienteId)
         {
-            return await context.Contas
+            return await context.Conta
                 .Where(x => x.Cliente.Id == clienteId)
                 .ToListAsync();
         }
 
         public async Task<bool?> InativarContaAsync(int contaId)
         {
-            var contaConsultada = await context.Contas.FindAsync(contaId);
+            var contaConsultada = await context.Conta.FindAsync(contaId);
 
             if(contaConsultada == null)
             {
@@ -76,7 +76,7 @@ namespace ContaObj.Infra.Repositories
 
         public async Task<Conta> InsertContaAsync(Conta novaConta)
         {
-            await context.Contas.AddAsync(novaConta);
+            await context.Conta.AddAsync(novaConta);
             await context.SaveChangesAsync();
             return novaConta;
         }
@@ -105,8 +105,8 @@ namespace ContaObj.Infra.Repositories
         public async Task<bool?> TransferirDeAgenciaAsync(int contaId, int agenciaOrigemId, int agenciaDestinoId)
         {
             var contaConsultada = await GetContaAsync(contaId);
-            var agenciaOrigem = await context.Agencias.FindAsync(agenciaOrigemId);
-            var agenciaDestino = await context.Agencias.FindAsync(agenciaDestinoId);
+            var agenciaOrigem = await context.Agencia.FindAsync(agenciaOrigemId);
+            var agenciaDestino = await context.Agencia.FindAsync(agenciaDestinoId);
 
             if (contaConsultada == null || agenciaOrigem == null || agenciaDestino == null)
             {

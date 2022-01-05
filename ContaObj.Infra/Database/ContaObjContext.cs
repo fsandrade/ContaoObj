@@ -7,10 +7,13 @@ namespace ContaObj.Infra.Database;
 
 public class ContaObjContext : DbContext
 {
-    public DbSet<Cliente> Clientes;
-    public DbSet<Conta> Contas;
-    public DbSet<Agencia> Agencias;
-    public DbSet<Transacao> Transacoes;
+    public DbSet<Cliente> Clientes { get; set; }
+    public DbSet<Conta> Conta { get; set; }
+    public DbSet<Agencia> Agencia { get; set; }
+    public DbSet<Transacao> Transacoe { get; set; }
+    public DbSet<Telefone> Telefone { get; set; }
+    public DbSet<Endereco> Endereco { get; set; }
+
 
     public ContaObjContext(DbContextOptions<ContaObjContext> options) : base(options)
     {

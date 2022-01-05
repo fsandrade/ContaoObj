@@ -11,6 +11,8 @@ public class ClienteViewModelMappingProfile : Profile
         CreateMap<ClienteViewModel, Cliente>().ReverseMap();
         CreateMap<NovoCliente, Cliente>().ReverseMap();
         CreateMap<AlteraCliente, Cliente>().ReverseMap();
+        CreateMap<NovoEndereco, Endereco>().ReverseMap();
+        CreateMap<NovoTelefone, Telefone>().ReverseMap();
     }
 }
 

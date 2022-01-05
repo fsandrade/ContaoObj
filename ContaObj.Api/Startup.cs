@@ -5,6 +5,7 @@ using ContaObj.Application.Validators;
 using ContaObj.Application.Mappings;
 using ContaObj.Infra.Repositories;
 using ContaObj.Application.Interfaces;
+using ContaObj.Api.Configurations;
 
 namespace ContaObj.Api;
 
@@ -24,10 +25,8 @@ public class Startup
             p.RegisterValidatorsFromAssemblyContaining<NovoClienteValidator>();
         });
 
-        services.AddAutoMapper(
-            typeof(ClienteViewModelMappingProfile));
-
-        services.AddScoped<IClienteRepository, ClienteRepository>();
+        services.AdicionaAutoMapper();
+        services.AdicionaConfiguracaoInjecaoDependencia();
 
         //TODO fazer arquivos de configuração
         //TODO Configurar services e automappers em classe separada

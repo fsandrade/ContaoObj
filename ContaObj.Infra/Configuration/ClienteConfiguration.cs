@@ -8,7 +8,7 @@ namespace ContaObj.Infra.Configuration
     {
         public void Configure(EntityTypeBuilder<Cliente> builder)
         {
-            //builder.Property(p => p.DataNascimento).HasColumnType("date");
+            
         }
     }
 }
