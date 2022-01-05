@@ -4,6 +4,7 @@ using ContaObj.Infra.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ContaObj.Infra.Migrations
 {
     [DbContext(typeof(ContaObjContext))]
-    partial class ContaObjContextModelSnapshot : ModelSnapshot
+    [Migration("20220105172249_altera-o-nome-da-tabela-cliente-para-clientes")]
+    partial class alteraonomedatabelaclienteparaclientes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,7 +51,7 @@ namespace ContaObj.Infra.Migrations
 
                     b.HasIndex("EnderecoId");
 
-                    b.ToTable("Agencias");
+                    b.ToTable("Agencia");
                 });
 
             modelBuilder.Entity("ContaObj.Domain.Model.Banco", b =>
@@ -146,7 +148,7 @@ namespace ContaObj.Infra.Migrations
 
                     b.HasIndex("ClienteId1");
 
-                    b.ToTable("Contas");
+                    b.ToTable("Conta");
                 });
 
             modelBuilder.Entity("ContaObj.Domain.Model.Endereco", b =>
@@ -163,7 +165,7 @@ namespace ContaObj.Infra.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Enderecos");
+                    b.ToTable("Endereco");
                 });
 
             modelBuilder.Entity("ContaObj.Domain.Model.Telefone", b =>
@@ -188,7 +190,7 @@ namespace ContaObj.Infra.Migrations
 
                     b.HasIndex("ClienteId");
 
-                    b.ToTable("Telefones");
+                    b.ToTable("Telefone");
                 });
 
             modelBuilder.Entity("ContaObj.Domain.Model.Transacao", b =>
@@ -223,7 +225,7 @@ namespace ContaObj.Infra.Migrations
 
                     b.HasIndex("OrigemId");
 
-                    b.ToTable("Transacoes");
+                    b.ToTable("Transacoe");
                 });
 
             modelBuilder.Entity("ContaObj.Domain.Model.Agencia", b =>

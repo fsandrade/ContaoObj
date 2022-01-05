@@ -4,6 +4,7 @@ using ContaObj.Infra.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ContaObj.Infra.Migrations
 {
     [DbContext(typeof(ContaObjContext))]
-    partial class ContaObjContextModelSnapshot : ModelSnapshot
+    [Migration("20220105172713_altera-o-nome-das-tabelas")]
+    partial class alteraonomedastabelas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

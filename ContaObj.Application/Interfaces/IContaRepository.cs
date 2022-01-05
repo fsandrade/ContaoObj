@@ -9,7 +9,7 @@ namespace ContaObj.Application.Interfaces
         Task<Conta> GetContaAsync(int contaId);
         Task<IEnumerable<Conta>> GetContasAsync();
         Task<IEnumerable<Conta>> GetContasPorClienteAsync(int clienteId);
-        Task<bool?> InativarContaAsync(int contaId);
+        Task InativarContaAsync(int contaId);
         Task<Conta> InsertContaAsync(Conta novaConta);
         Task<bool?> SacarAsync(int contaId, decimal valorSaque);
         Task<bool?> TransferirDeAgenciaAsync(int contaId, int agenciaOrigemId, int agenciaDestinoId);

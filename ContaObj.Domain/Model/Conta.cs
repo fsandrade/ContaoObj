@@ -12,4 +12,9 @@ public class Conta
     public Cliente Cliente { get; set; }
     public Agencia Agencia { get; set; }
     public StatusConta Status { get; set; }
+
+    public void Inativar()
+    {
+        Status = StatusConta.Inativa;
+    }
 }
