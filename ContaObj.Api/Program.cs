@@ -1,11 +1,30 @@
 using ContaObj.Api;
+using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
+Log.Information("Iniciando WebAPI");
 
-var startup = new Startup(builder.Configuration);
-startup.ConfigureServices(builder.Services);
-var app = builder.Build();
+try
+{
+    var builder = WebApplication.CreateBuilder(args);
 
-startup.Configure(app, app.Environment);
+    builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(ctx.Configuration));
 
-app.Run();
+    var startup = new Startup(builder.Configuration);
+    startup.ConfigureServices(builder.Services);
+
+    var app = builder.Build();
+
+    startup.Configure(app, app.Environment);
+
+    app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Erro inexperado");
+}
+finally
+{
+    Log.Information("Finalizando WebApi");
+    Log.CloseAndFlush();
+}
+

@@ -1,10 +1,5 @@
-﻿using ContaObj.Infra.Database;
-using Microsoft.EntityFrameworkCore;
-using FluentValidation.AspNetCore;
+﻿using FluentValidation.AspNetCore;
 using ContaObj.Application.Validators;
-using ContaObj.Application.Mappings;
-using ContaObj.Infra.Repositories;
-using ContaObj.Application.Interfaces;
 using ContaObj.Api.Configurations;
 
 namespace ContaObj.Api;
@@ -26,13 +21,13 @@ public class Startup
         });
 
         services.AdicionaAutoMapper();
+
         services.AdicionaConfiguracaoInjecaoDependencia();
 
-        //TODO fazer arquivos de configuração
-        //TODO Configurar services e automappers em classe separada
-
         services.AdicionarConfiguracaoDatabase(Configuration);
+
         services.AddEndpointsApiExplorer();
+
         services.AddSwaggerGen();
     }
 
