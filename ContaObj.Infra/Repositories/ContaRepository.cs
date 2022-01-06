@@ -24,7 +24,7 @@ public class ContaRepository : IContaRepository
             return null;
         }
 
-        contaConsultada.Saldo += valorDeposito;
+        contaConsultada.Depositar(valorDeposito);
 
         //TODO criar nova transacao
 
@@ -93,26 +93,28 @@ public class ContaRepository : IContaRepository
         }
 
         //TODO criar nova transação
-        //TODO alterar saldo conta
+        contaConsultada.Sacar(valorSaque);
 
         await context.SaveChangesAsync();
         return true;
     }
 
-    public async Task<bool?> TransferirDeAgenciaAsync(int contaId, int agenciaOrigemId, int agenciaDestinoId)
+    private async Task TransferirDeAgenciaAsync(Conta conta, Conta contaConsultadaParaAlteracao)
     {
-        var contaConsultada = await GetContaAsync(contaId);
-        var agenciaOrigem = await context.Agencias.FindAsync(agenciaOrigemId);
-        var agenciaDestino = await context.Agencias.FindAsync(agenciaDestinoId);
-
-        if (contaConsultada == null || agenciaOrigem == null || agenciaDestino == null)
+        if(conta.Agencia.Id == contaConsultadaParaAlteracao.Agencia.Id)
         {
-            return null;
+            return;
         }
 
-        contaConsultada.Agencia = agenciaDestino;
-        await context.SaveChangesAsync();
-        return true;
+        var contaConsultada = await GetContaAsync(conta.Id);
+        var agenciaDestino = await context.Agencias.FindAsync(conta.Agencia.Id);
+
+        if (contaConsultada == null || agenciaDestino == null)
+        {
+            throw new ApplicationException("Nova agência inexistente");
+        }
+
+        contaConsultada.AlterarAgencia(agenciaDestino);
     }
 
     public async Task<bool?> UpdateContaAsync(Conta alterarConta)
@@ -125,6 +127,7 @@ public class ContaRepository : IContaRepository
         }
 
         context.Entry(contaConsultada).CurrentValues.SetValues(alterarConta);
+        await TransferirDeAgenciaAsync(alterarConta, contaConsultada);
 
         await context.SaveChangesAsync();
         return true;

@@ -12,7 +12,6 @@ namespace ContaObj.Application.Interfaces
         Task InativarContaAsync(int contaId);
         Task<Conta> InsertContaAsync(Conta novaConta);
         Task<bool?> SacarAsync(int contaId, decimal valorSaque);
-        Task<bool?> TransferirDeAgenciaAsync(int contaId, int agenciaOrigemId, int agenciaDestinoId);
         Task<bool?> UpdateContaAsync(Conta alterarConta);
     }
 }
