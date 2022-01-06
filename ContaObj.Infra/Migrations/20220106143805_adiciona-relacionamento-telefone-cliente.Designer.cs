@@ -4,6 +4,7 @@ using ContaObj.Infra.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ContaObj.Infra.Migrations
 {
     [DbContext(typeof(ContaObjContext))]
-    partial class ContaObjContextModelSnapshot : ModelSnapshot
+    [Migration("20220106143805_adiciona-relacionamento-telefone-cliente")]
+    partial class adicionarelacionamentotelefonecliente
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -17,8 +17,7 @@ public class ClienteRepository : IClienteRepository
 
     public async Task<IEnumerable<Cliente>> GetClientesAsync()
     {
-        var clientes = await context.Clientes.AsNoTracking().ToListAsync();
-        return clientes;
+        return await context.Clientes.AsNoTracking().ToListAsync();
     }
 
     public async Task<Cliente> GetClienteAsync(int id)
@@ -46,20 +45,17 @@ public class ClienteRepository : IClienteRepository
         }
         
         context.Entry(clienteConsultado).CurrentValues.SetValues(cliente);
-        clienteConsultado.Endereco = cliente.Endereco;
+        clienteConsultado.Endereco.AlteraEndereco(cliente.Endereco);
+        clienteConsultado.AtualizaTelefones(cliente.Telefones);
         UpdateClienteTelefones(clienteConsultado, cliente);
 
         await context.SaveChangesAsync();
         return cliente;
     }
 
-    public void UpdateClienteTelefones(Cliente clienteConsultado, Cliente cliente)
-    {
-        clienteConsultado.Telefones.Clear();
-        foreach (var telefone in cliente.Telefones)
-        {
-            clienteConsultado.Telefones.Add(telefone);
-        }
+    private void UpdateClienteTelefones(Cliente clienteConsultado, Cliente cliente)
+    { 
+        clienteConsultado.Telefones = cliente.Telefones;
     }
 
     public async Task<bool?> InativarClienteAsync(int clienteId)

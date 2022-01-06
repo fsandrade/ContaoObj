@@ -48,9 +48,13 @@ namespace ContaObj.Api.Controllers
             return CreatedAtAction(nameof(Get), new { id = clienteInserido.Id }, clienteInserido);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Put(AlteraCliente alteraCliente)
+        [HttpPut("{id}")]
+        public async Task<ActionResult<AlteraCliente>> Put(int id, AlteraCliente alteraCliente)
         {
+            if (id != alteraCliente.Id)
+            {
+                return BadRequest();
+            }
             var clienteAlterado = await clienteManager.UpdateClienteAsync(alteraCliente);
 
             if(clienteAlterado == null)
@@ -60,6 +64,8 @@ namespace ContaObj.Api.Controllers
 
             return Ok(clienteAlterado);
         }
+
+
 
         [HttpDelete("{clienteId}")]
         public async Task<IActionResult> Delete(int clienteId)
@@ -71,7 +77,7 @@ namespace ContaObj.Api.Controllers
                 return NotFound();
             }
 
-            return Ok(inativouCliente);
+            return NoContent();
         }
     }
 }

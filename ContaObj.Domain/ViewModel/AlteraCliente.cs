@@ -1,8 +1,9 @@
 ﻿
-namespace ContaObj.Domain.ViewModel
+namespace ContaObj.Domain.ViewModel;
+
+public partial class AlteraCliente : NovoCliente
 {
-    public class AlteraCliente : NovoCliente
-    {
-        public int Id { get; set; }
-    }
+    public int Id { get; set; }
+
+    public List<AlteraTelefone> Telefones { get; set; }
 }

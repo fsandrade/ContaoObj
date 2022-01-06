@@ -19,4 +19,9 @@ public class Cliente
     {
         Status = StatusCliente.Inativo;
     }
+
+    public void AtualizaTelefones(List<Telefone> telefones)
+    {
+        Telefones = telefones;
+    }
 }
