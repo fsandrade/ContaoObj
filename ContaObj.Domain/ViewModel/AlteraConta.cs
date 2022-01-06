@@ -1,6 +1,7 @@
 ﻿namespace ContaObj.Domain.ViewModel
 {
-    public class AlteraConta
+    public class AlteraConta: NovaConta
     {
+        public int Id { get; set; }
     }
 }

@@ -18,7 +18,7 @@ namespace ContaObj.Application.Managers
 
         public Task<bool?> DepositarAsync(int contaId, decimal valorDeposito)
         {
-            throw new NotImplementedException();
+            return contaRepository.DepositarAsync(contaId, valorDeposito);
         }
 
         public Task<IEnumerable<TransacaoViewModel>> ExtratoPorPeriodoAsync(int contaId, DateTime inicio, DateTime fim)
@@ -26,9 +26,10 @@ namespace ContaObj.Application.Managers
             throw new NotImplementedException();
         }
 
-        public Task<ContaViewModel> GetContaAsync(int contaId)
+        public async Task<ContaViewModel> GetContaAsync(int contaId)
         {
-            throw new NotImplementedException();
+            var conta = await contaRepository.GetContaAsync(contaId);
+            return mapper.Map<ContaViewModel>(conta);
         }
 
         public async Task<IEnumerable<ContaViewModel>> GetContasAsync()
@@ -48,19 +49,22 @@ namespace ContaObj.Application.Managers
             await contaRepository.InativarContaAsync(contaId);
         }
 
-        public Task<ContaViewModel> InsertContaAsync(NovaConta novaConta)
+        public async Task<ContaViewModel> InsertContaAsync(NovaConta novaConta)
         {
-            throw new NotImplementedException();
+            var conta = mapper.Map<Conta>(novaConta);
+            conta = await contaRepository.InsertContaAsync(conta);
+            return mapper.Map<ContaViewModel>(conta);
         }
 
         public Task<bool?> SacarAsync(int contaId, decimal valorSaque)
         {
-            throw new NotImplementedException();
+            return contaRepository.SacarAsync(contaId, valorSaque);
         }
 
-        public Task<bool?> UpdateContaAsync(AlteraConta alterarConta)
+        public async Task<bool?> UpdateContaAsync(AlteraConta alterarConta)
         {
-            throw new NotImplementedException();
+            var conta = mapper.Map<Conta>(alterarConta);
+            return await contaRepository.UpdateContaAsync(conta);
         }
     }
 }
