@@ -17,4 +17,19 @@ public class Conta
     {
         Status = StatusConta.Inativa;
     }
+
+    public void Sacar(decimal valorSaque)
+    {
+        Saldo -= valorSaque;
+    }
+
+    public void Depositar(decimal valorDeposito)
+    {
+        Saldo += valorDeposito;
+    }
+
+    public void AlterarAgencia(Agencia novaAgencia)
+    {
+        Agencia = novaAgencia;
+    }
 }

@@ -42,5 +42,10 @@ public class ClienteManager : IClienteManager
         cliente = await clienteRepository.UpdateClienteAsync(cliente);
         return mapper.Map<ClienteViewModel>(cliente);
     }
+
+    public async Task<bool?> InativarClienteAsync(int clienteId)
+    {
+        return await clienteRepository.InativarClienteAsync(clienteId);
+    }
 }
 

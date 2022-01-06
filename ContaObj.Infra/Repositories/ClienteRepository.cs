@@ -35,16 +35,18 @@ public class ClienteRepository : IClienteRepository
 
     public async Task<Cliente> UpdateClienteAsync(Cliente cliente)
     {
-        var clienteConsultado = await context.Clientes.FindAsync(cliente.Id);
+        var clienteConsultado = await context.Clientes
+            .Include(x => x.Telefones)
+            .Include(x => x.Endereco)
+            .FirstOrDefaultAsync(x => x.Id == cliente.Id);
 
         if(clienteConsultado == null)
         {
             return null;
         }
-
-        clienteConsultado.Endereco = cliente.Endereco;
-
+        
         context.Entry(clienteConsultado).CurrentValues.SetValues(cliente);
+        clienteConsultado.Endereco = cliente.Endereco;
         UpdateClienteTelefones(clienteConsultado, cliente);
 
         await context.SaveChangesAsync();
@@ -60,7 +62,7 @@ public class ClienteRepository : IClienteRepository
         }
     }
 
-    public async Task<bool?> InativarCliente(int clienteId)
+    public async Task<bool?> InativarClienteAsync(int clienteId)
     {
         var clienteConsultado = await context.Clientes.FindAsync(clienteId);
 
@@ -69,7 +71,7 @@ public class ClienteRepository : IClienteRepository
             return null;
         }
 
-        clienteConsultado.Status = StatusCliente.Inativo;
+        clienteConsultado.Inativar();
         await context.SaveChangesAsync();
         return true;
     }
