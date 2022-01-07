@@ -47,16 +47,11 @@ public class ClienteRepository : IClienteRepository
         context.Entry(clienteConsultado).CurrentValues.SetValues(cliente);
         clienteConsultado.Endereco.AlteraEndereco(cliente.Endereco);
         clienteConsultado.AtualizaTelefones(cliente.Telefones);
-        UpdateClienteTelefones(clienteConsultado, cliente);
-
         await context.SaveChangesAsync();
         return cliente;
     }
 
-    private void UpdateClienteTelefones(Cliente clienteConsultado, Cliente cliente)
-    { 
-        clienteConsultado.Telefones = cliente.Telefones;
-    }
+  
 
     public async Task<bool?> InativarClienteAsync(int clienteId)
     {
