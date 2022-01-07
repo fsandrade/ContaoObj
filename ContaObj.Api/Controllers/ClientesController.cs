@@ -1,108 +1,92 @@
 ﻿using ContaObj.Application.Interfaces;
 using ContaObj.Domain.ViewModel;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
-namespace ContaObj.Api.Controllers
+namespace ContaObj.Api.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class ClientesController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]    
-    public class ClientesController : ControllerBase
-    {
-        private readonly IClienteManager clienteManager;
+    private readonly IClienteManager clienteManager;
 
-        public ClientesController(IClienteManager clienteManager)
+    public ClientesController(IClienteManager clienteManager)
+    {
+        this.clienteManager = clienteManager;
+    }
+
+    [SwaggerOperation(Summary = "Retorna todos os clientes")]
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<ClienteViewModel>>> GetNome()
+    {
+        var clientes = await clienteManager.GetClientesAsync();
+
+        if (clientes.Any())
         {
-            this.clienteManager = clienteManager;
+            return Ok(clientes);
         }
 
-        /// <summary>
-        /// Retorna todos os clientes
-        /// </summary>
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ClienteViewModel>>> GetNome()
+        return NotFound();
+    }
+
+    [SwaggerOperation(Summary = "Retorna cliente pelo id")]
+    [HttpGet("{id}")]
+    public async Task<ActionResult<ClienteViewModel>> GetNome([SwaggerParameter("Id do cliente")] int id)
+    {
+        var cliente = await clienteManager.GetClienteAsync(id);
+
+        if (cliente == null)
         {
-            var clientes = await clienteManager.GetClientesAsync();
-
-            if (clientes.Any())
-            {
-                return Ok(clientes);
-            }
-
             return NotFound();
         }
 
-        /// <summary>
-        /// Retorna cliente pelo id
-        /// </summary>
-        /// <param name="id">Id do cliente</param>
-        [HttpGet("{id}")]      
-        public async Task<ActionResult<ClienteViewModel>> GetNome(int id)
+        return Ok(cliente);
+    }
+
+    [SwaggerOperation(Summary = "Insere novo cliente")]
+    [HttpPost]
+    public async Task<ActionResult<ClienteViewModel>> PostNome([SwaggerParameter("Cliente para inserção")] NovoCliente novoCliente)
+    {
+        ClienteViewModel clienteInserido = await clienteManager.InsertClienteAsync(novoCliente);
+        return CreatedAtAction(nameof(GetNome), new { id = clienteInserido.Id }, clienteInserido);
+    }
+
+    [SwaggerOperation(Summary = "Altera cliente existente")]
+    [HttpPut("{id}")]
+    public async Task<ActionResult<AlteraCliente>> PutNome([SwaggerParameter("Id do cliente")] int id, AlteraCliente alteraCliente)
+    {
+        if (id != alteraCliente.Id)
         {
-            var cliente = await clienteManager.GetClienteAsync(id);
+            return BadRequest(
+                new ProblemDetails
+                {
+                    Title = "One or more validation errors occurred.",
+                    Status = 400,
+                    Detail = "O Id informado no path é diferente do Id informado no body."
+                });
+        }
+        var clienteAlterado = await clienteManager.UpdateClienteAsync(alteraCliente);
 
-            if (cliente == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(cliente);
+        if (clienteAlterado == null)
+        {
+            return NotFound();
         }
 
-        /// <summary>
-        /// Insere novo cliente
-        /// </summary>
-        /// <param name="novoCliente">Cliente para inserção</param>
-        [HttpPost]      
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status417ExpectationFailed)]
-        public async Task<ActionResult<ClienteViewModel>> PostNome(NovoCliente novoCliente)
+        return Ok(clienteAlterado);
+    }
+
+    [SwaggerOperation(Summary = "Inativa cliente")]
+    [HttpDelete("{clienteId}")]
+    public async Task<IActionResult> DeleteNome([SwaggerParameter("Id do cliente")] int clienteId)
+    {
+        var inativouCliente = await clienteManager.InativarClienteAsync(clienteId);
+
+        if (inativouCliente == null)
         {
-            ClienteViewModel clienteInserido = await clienteManager.InsertClienteAsync(novoCliente);
-            return CreatedAtAction(nameof(GetNome), new { id = clienteInserido.Id }, clienteInserido);
+            return NotFound();
         }
 
-        /// <summary>
-        /// Altera cliente existente
-        /// </summary>
-        /// <param name="id">Id do cliente</param>
-        /// <param name="alteraCliente">Cliente a ser alterado</param>
-        [HttpPut("{id}")]      
-        public async Task<ActionResult<AlteraCliente>> PutNome(int id, AlteraCliente alteraCliente)
-        {
-            if (id != alteraCliente.Id)
-            {
-                return BadRequest(
-                    new ProblemDetails
-                    {
-                        Title = "One or more validation errors occurred.",
-                        Status = 400,
-                        Detail = "O Id informado no path é diferente do Id informado no body."
-                    });
-            }
-            var clienteAlterado = await clienteManager.UpdateClienteAsync(alteraCliente);
-
-            if(clienteAlterado == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(clienteAlterado);
-        }
-
-        /// <summary>
-        /// Inativa cliente
-        /// </summary>
-        /// <param name="clienteId">Id do cliente a ser inativado</param>
-        [HttpDelete("{clienteId}")]
-        public async Task<IActionResult> DeleteNome(int clienteId)
-        {
-            var inativouCliente = await clienteManager.InativarClienteAsync(clienteId);
-
-            if(inativouCliente == null)
-            {
-                return NotFound();
-            }
-
-            return NoContent();
-        }
+        return NoContent();
     }
 }
