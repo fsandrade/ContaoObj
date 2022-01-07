@@ -16,7 +16,7 @@ public class Cliente
     public List<Conta> Contas { get; set; }
 
     public void Inativar()
-    {
+    {       
         Status = StatusCliente.Inativo;
     }
 

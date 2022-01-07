@@ -55,7 +55,9 @@ public class ClienteRepository : IClienteRepository
 
     public async Task<bool?> InativarClienteAsync(int clienteId)
     {
-        var clienteConsultado = await context.Clientes.FindAsync(clienteId);
+        var clienteConsultado = await context.Clientes.
+                                            Include(p => p.Contas)
+                                            .FirstOrDefaultAsync( p=> p.Id == clienteId);
 
         if (clienteConsultado == null)
         {

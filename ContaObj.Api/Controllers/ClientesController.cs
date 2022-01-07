@@ -19,8 +19,7 @@ namespace ContaObj.Api.Controllers
         /// Retorna todos os clientes
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(ClienteViewModel), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<ClienteViewModel>>> Get()
         {
@@ -37,10 +36,10 @@ namespace ContaObj.Api.Controllers
         /// <summary>
         /// Retorna cliente pelo id
         /// </summary>
-        /// <param name="id">id do cliente</param>
+        /// <param name="id">Id do cliente</param>
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(ClienteViewModel), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<ClienteViewModel>> Get(int id)
         {
@@ -59,7 +58,8 @@ namespace ContaObj.Api.Controllers
         /// </summary>
         /// <param name="novoCliente">Cliente para inserção</param>
         [HttpPost]
-        [ProducesResponseType(typeof(ClienteViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<ClienteViewModel>> Post(NovoCliente novoCliente)
         {
@@ -70,18 +70,23 @@ namespace ContaObj.Api.Controllers
         /// <summary>
         /// Altera cliente existente
         /// </summary>
-        /// <param name="id">id do cliente</param>
-        /// <param name="alteraCliente">cliente a ser alterado</param>
+        /// <param name="id">Id do cliente</param>
+        /// <param name="alteraCliente">Cliente a ser alterado</param>
         [HttpPut("{id}")]
-        [ProducesResponseType(typeof(ClienteViewModel), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<AlteraCliente>> Put(int id, AlteraCliente alteraCliente)
         {
             if (id != alteraCliente.Id)
             {
-                return BadRequest();
+                return BadRequest(
+                    new ProblemDetails
+                    {
+                        Title = "One or more validation errors occurred.",
+                        Status = 400,
+                        Detail = "O Id informado no path é diferente do Id informado no body."
+                    });
             }
             var clienteAlterado = await clienteManager.UpdateClienteAsync(alteraCliente);
 
@@ -96,10 +101,10 @@ namespace ContaObj.Api.Controllers
         /// <summary>
         /// Inativa cliente
         /// </summary>
-        /// <param name="clienteId">id do cliente a ser inativado</param>
+        /// <param name="clienteId">Id do cliente a ser inativado</param>
         [HttpDelete("{clienteId}")]
-        [ProducesResponseType(typeof(ClienteViewModel), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int clienteId)
         {
