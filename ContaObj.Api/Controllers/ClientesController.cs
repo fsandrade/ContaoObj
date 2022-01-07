@@ -15,7 +15,13 @@ namespace ContaObj.Api.Controllers
             this.clienteManager = clienteManager;
         }
 
+        /// <summary>
+        /// Retorna todos os clientes
+        /// </summary>
         [HttpGet]
+        [ProducesResponseType(typeof(ClienteViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<ClienteViewModel>>> Get()
         {
             var clientes = await clienteManager.GetClientesAsync();
@@ -28,7 +34,14 @@ namespace ContaObj.Api.Controllers
             return NotFound();
         }
 
+        /// <summary>
+        /// Retorna cliente pelo id
+        /// </summary>
+        /// <param name="id">id do cliente</param>
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(ClienteViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<ClienteViewModel>> Get(int id)
         {
             var cliente = await clienteManager.GetClienteAsync(id);
@@ -41,14 +54,29 @@ namespace ContaObj.Api.Controllers
             return Ok(cliente);
         }
 
+        /// <summary>
+        /// Insere novo cliente
+        /// </summary>
+        /// <param name="novoCliente">Cliente para inserção</param>
         [HttpPost]
+        [ProducesResponseType(typeof(ClienteViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<ClienteViewModel>> Post(NovoCliente novoCliente)
         {
             ClienteViewModel clienteInserido = await clienteManager.InsertClienteAsync(novoCliente);
             return CreatedAtAction(nameof(Get), new { id = clienteInserido.Id }, clienteInserido);
         }
 
+        /// <summary>
+        /// Altera cliente existente
+        /// </summary>
+        /// <param name="id">id do cliente</param>
+        /// <param name="alteraCliente">cliente a ser alterado</param>
         [HttpPut("{id}")]
+        [ProducesResponseType(typeof(ClienteViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<AlteraCliente>> Put(int id, AlteraCliente alteraCliente)
         {
             if (id != alteraCliente.Id)
@@ -65,9 +93,14 @@ namespace ContaObj.Api.Controllers
             return Ok(clienteAlterado);
         }
 
-
-
+        /// <summary>
+        /// Inativa cliente
+        /// </summary>
+        /// <param name="clienteId">id do cliente a ser inativado</param>
         [HttpDelete("{clienteId}")]
+        [ProducesResponseType(typeof(ClienteViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int clienteId)
         {
             var inativouCliente = await clienteManager.InativarClienteAsync(clienteId);
