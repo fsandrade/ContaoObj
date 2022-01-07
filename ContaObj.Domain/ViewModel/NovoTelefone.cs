@@ -2,13 +2,9 @@
 
 public class NovoTelefone
 {
-    /// <summary>
-    /// DDD do telefone do cliente
-    /// </summary>
+    /// <example>18</example>
     public int Ddd { get; set; }
 
-    /// <summary>
-    /// Número do telefone do cliente
-    /// </summary>
+    /// <example>154785926</example>
     public string Numero { get; set; }
 }

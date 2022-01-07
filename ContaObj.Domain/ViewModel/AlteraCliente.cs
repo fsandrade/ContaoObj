@@ -6,10 +6,8 @@ public partial class AlteraCliente : NovoCliente
     /// <summary>
     /// ID do cliente existente
     /// </summary>
+    /// <example>1</example>
     public int Id { get; set; }
 
-    /// <summary>
-    /// Lista de possíveis telefones alterados
-    /// </summary>
     public List<AlteraTelefone> Telefones { get; set; }
 }
