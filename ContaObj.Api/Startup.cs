@@ -2,6 +2,8 @@
 using ContaObj.Application.Validators;
 using ContaObj.Api.Configurations;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ContaObj.Api;
 
@@ -21,6 +23,7 @@ public class Startup
             p.RegisterValidatorsFromAssemblyContaining<NovoClienteValidator>();
         });
 
+        services.TryAddEnumerable(ServiceDescriptor.Transient<IApplicationModelProvider, ProduceResponseTypeModelProvider>());
         services.AdicionaAutoMapper();
 
         services.AdicionaConfiguracaoInjecaoDependencia();

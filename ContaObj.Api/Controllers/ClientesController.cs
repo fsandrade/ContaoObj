@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ContaObj.Api.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController]    
     public class ClientesController : ControllerBase
     {
         private readonly IClienteManager clienteManager;
@@ -19,9 +19,7 @@ namespace ContaObj.Api.Controllers
         /// Retorna todos os clientes
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IEnumerable<ClienteViewModel>>> Get()
+        public async Task<ActionResult<IEnumerable<ClienteViewModel>>> GetNome()
         {
             var clientes = await clienteManager.GetClientesAsync();
 
@@ -37,11 +35,8 @@ namespace ContaObj.Api.Controllers
         /// Retorna cliente pelo id
         /// </summary>
         /// <param name="id">Id do cliente</param>
-        [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ClienteViewModel>> Get(int id)
+        [HttpGet("{id}")]      
+        public async Task<ActionResult<ClienteViewModel>> GetNome(int id)
         {
             var cliente = await clienteManager.GetClienteAsync(id);
 
@@ -57,14 +52,12 @@ namespace ContaObj.Api.Controllers
         /// Insere novo cliente
         /// </summary>
         /// <param name="novoCliente">Cliente para inserção</param>
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ClienteViewModel>> Post(NovoCliente novoCliente)
+        [HttpPost]      
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status417ExpectationFailed)]
+        public async Task<ActionResult<ClienteViewModel>> PostNome(NovoCliente novoCliente)
         {
             ClienteViewModel clienteInserido = await clienteManager.InsertClienteAsync(novoCliente);
-            return CreatedAtAction(nameof(Get), new { id = clienteInserido.Id }, clienteInserido);
+            return CreatedAtAction(nameof(GetNome), new { id = clienteInserido.Id }, clienteInserido);
         }
 
         /// <summary>
@@ -72,11 +65,8 @@ namespace ContaObj.Api.Controllers
         /// </summary>
         /// <param name="id">Id do cliente</param>
         /// <param name="alteraCliente">Cliente a ser alterado</param>
-        [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<AlteraCliente>> Put(int id, AlteraCliente alteraCliente)
+        [HttpPut("{id}")]      
+        public async Task<ActionResult<AlteraCliente>> PutNome(int id, AlteraCliente alteraCliente)
         {
             if (id != alteraCliente.Id)
             {
@@ -103,10 +93,7 @@ namespace ContaObj.Api.Controllers
         /// </summary>
         /// <param name="clienteId">Id do cliente a ser inativado</param>
         [HttpDelete("{clienteId}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(int clienteId)
+        public async Task<IActionResult> DeleteNome(int clienteId)
         {
             var inativouCliente = await clienteManager.InativarClienteAsync(clienteId);
 
