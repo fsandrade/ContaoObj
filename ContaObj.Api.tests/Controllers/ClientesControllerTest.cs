@@ -41,7 +41,7 @@ namespace ContaObj.Api.tests.Controllers
 
             clienteManager.GetClientesAsync().Returns(clientesViewModel);
 
-            var resultado = await controller.GetNome();
+            var resultado = await controller.Get();
 
             await clienteManager.Received().GetClientesAsync();
             resultado.Result.Should().BeOfType(typeof(OkObjectResult));
@@ -53,7 +53,7 @@ namespace ContaObj.Api.tests.Controllers
         {
             clienteManager.GetClientesAsync().Returns(new List<ClienteViewModel>());
 
-            var resultado = await controller.GetNome();
+            var resultado = await controller.Get();
 
             await clienteManager.Received().GetClientesAsync();
             resultado.Result.Should().BeOfType(typeof(NotFoundResult));
@@ -64,7 +64,7 @@ namespace ContaObj.Api.tests.Controllers
         {
             clienteManager.GetClienteAsync(Arg.Any<int>()).Returns(clienteViewModel.CloneTipado());
 
-            var resultado = await controller.GetNome(clienteViewModel.Id);
+            var resultado = await controller.Get(clienteViewModel.Id);
 
             await clienteManager.Received().GetClienteAsync(Arg.Any<int>());
             ((ObjectResult)resultado.Result).Value.Should().BeEquivalentTo(clienteViewModel);
@@ -76,7 +76,7 @@ namespace ContaObj.Api.tests.Controllers
         {
             clienteManager.GetClienteAsync(Arg.Any<int>()).ReturnsNull();
 
-            var resultado = await controller.GetNome(1);
+            var resultado = await controller.Get(1);
 
             await clienteManager.Received().GetClienteAsync(Arg.Any<int>());
             resultado.Result.Should().BeOfType(typeof(NotFoundResult));
@@ -87,7 +87,7 @@ namespace ContaObj.Api.tests.Controllers
         {
             clienteManager.InsertClienteAsync(Arg.Any<NovoCliente>()).Returns(clienteViewModel.CloneTipado());
 
-            var resultado = await controller.PostNome(novoCliente);
+            var resultado = await controller.Post(novoCliente);
 
             await clienteManager.Received().InsertClienteAsync(Arg.Any<NovoCliente>());
             resultado.Result.Should().BeOfType(typeof(CreatedAtActionResult));
@@ -99,7 +99,7 @@ namespace ContaObj.Api.tests.Controllers
         {
             clienteManager.UpdateClienteAsync(Arg.Any<AlteraCliente>()).Returns(clienteViewModel.CloneTipado());
 
-            var resultado = await controller.PutNome(alteraCliente.Id, alteraCliente);
+            var resultado = await controller.Put(alteraCliente.Id, alteraCliente);
 
             await clienteManager.Received().UpdateClienteAsync(Arg.Any<AlteraCliente>());
             resultado.Result.Should().BeOfType(typeof(OkObjectResult));
@@ -111,7 +111,7 @@ namespace ContaObj.Api.tests.Controllers
         {
             clienteManager.UpdateClienteAsync(Arg.Any<AlteraCliente>()).ReturnsNull();
 
-            var resultado = await controller.PutNome(alteraCliente.Id + 1, alteraCliente);
+            var resultado = await controller.Put(alteraCliente.Id + 1, alteraCliente);
 
             resultado.Result.Should().BeOfType(typeof(BadRequestObjectResult));
         }
@@ -121,7 +121,7 @@ namespace ContaObj.Api.tests.Controllers
         {
             clienteManager.UpdateClienteAsync(Arg.Any<AlteraCliente>()).ReturnsNull();
 
-            var resultado = await controller.PutNome(alteraCliente.Id, alteraCliente);
+            var resultado = await controller.Put(alteraCliente.Id, alteraCliente);
 
             await clienteManager.Received().UpdateClienteAsync(Arg.Any<AlteraCliente>());
             resultado.Result.Should().BeOfType(typeof(NotFoundResult));
@@ -132,7 +132,7 @@ namespace ContaObj.Api.tests.Controllers
         {
             clienteManager.InativarClienteAsync(Arg.Any<int>()).Returns(clienteViewModel);
 
-            var resultado = await controller.DeleteNome(clienteViewModel.Id);
+            var resultado = await controller.Delete(clienteViewModel.Id);
 
             await clienteManager.Received().InativarClienteAsync(Arg.Any<int>());
             resultado.Should().BeOfType(typeof(NoContentResult));
@@ -143,7 +143,7 @@ namespace ContaObj.Api.tests.Controllers
         {
             clienteManager.InativarClienteAsync(clienteViewModel.Id).ReturnsNull();
 
-            var resultado = await controller.DeleteNome(clienteViewModel.Id);
+            var resultado = await controller.Delete(clienteViewModel.Id);
 
             await clienteManager.Received().InativarClienteAsync(Arg.Any<int>());
             resultado.Should().BeOfType(typeof(NotFoundResult));

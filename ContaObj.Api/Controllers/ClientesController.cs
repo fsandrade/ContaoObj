@@ -18,7 +18,7 @@ public class ClientesController : ControllerBase
 
     [SwaggerOperation(Summary = "Retorna todos os clientes")]
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ClienteViewModel>>> GetNome()
+    public async Task<ActionResult<IEnumerable<ClienteViewModel>>> Get()
     {
         var clientes = await clienteManager.GetClientesAsync();
 
@@ -32,7 +32,7 @@ public class ClientesController : ControllerBase
 
     [SwaggerOperation(Summary = "Retorna cliente pelo id")]
     [HttpGet("{id}")]
-    public async Task<ActionResult<ClienteViewModel>> GetNome([SwaggerParameter("Id do cliente")] int id)
+    public async Task<ActionResult<ClienteViewModel>> Get([SwaggerParameter("Id do cliente")] int id)
     {
         var cliente = await clienteManager.GetClienteAsync(id);
 
@@ -46,15 +46,15 @@ public class ClientesController : ControllerBase
 
     [SwaggerOperation(Summary = "Insere novo cliente")]
     [HttpPost]
-    public async Task<ActionResult<ClienteViewModel>> PostNome([SwaggerParameter("Cliente para inserção")] NovoCliente novoCliente)
+    public async Task<ActionResult<ClienteViewModel>> Post([SwaggerParameter("Cliente para inserção")] NovoCliente novoCliente)
     {
         ClienteViewModel clienteInserido = await clienteManager.InsertClienteAsync(novoCliente);
-        return CreatedAtAction(nameof(GetNome), new { id = clienteInserido.Id }, clienteInserido);
+        return CreatedAtAction(nameof(Get), new { id = clienteInserido.Id }, clienteInserido);
     }
 
     [SwaggerOperation(Summary = "Altera cliente existente")]
     [HttpPut("{id}")]
-    public async Task<ActionResult<AlteraCliente>> PutNome([SwaggerParameter("Id do cliente")] int id, AlteraCliente alteraCliente)
+    public async Task<ActionResult<AlteraCliente>> Put([SwaggerParameter("Id do cliente")] int id, AlteraCliente alteraCliente)
     {
         if (id != alteraCliente.Id)
         {
@@ -78,11 +78,11 @@ public class ClientesController : ControllerBase
 
     [SwaggerOperation(Summary = "Inativa cliente")]
     [HttpDelete("{clienteId}")]
-    public async Task<IActionResult> DeleteNome([SwaggerParameter("Id do cliente")] int clienteId)
+    public async Task<IActionResult> Delete([SwaggerParameter("Id do cliente")] int clienteId)
     {
-        var inativouCliente = await clienteManager.InativarClienteAsync(clienteId);
+        var clienteInativado = await clienteManager.InativarClienteAsync(clienteId);
 
-        if (inativouCliente == null)
+        if (clienteInativado == null)
         {
             return NotFound();
         }
