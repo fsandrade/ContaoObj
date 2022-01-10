@@ -23,4 +23,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ContaObj.FakeData\ContaObj.FakeData.csproj" />
+    <ProjectReference Include="..\ContaObj.Infra\ContaObj.Infra.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -3,7 +3,6 @@ using ContaObj.Application.Interfaces;
 using ContaObj.Domain.ViewModel;
 using ContaObj.FakeData.ClienteData;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
