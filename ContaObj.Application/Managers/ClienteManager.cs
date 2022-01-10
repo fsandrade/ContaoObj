@@ -43,9 +43,10 @@ public class ClienteManager : IClienteManager
         return mapper.Map<ClienteViewModel>(cliente);
     }
 
-    public async Task<bool?> InativarClienteAsync(int clienteId)
+    public async Task<ClienteViewModel> InativarClienteAsync(int clienteId)
     {
-        return await clienteRepository.InativarClienteAsync(clienteId);
+        var cliente = await clienteRepository.InativarClienteAsync(clienteId);
+        return mapper.Map<ClienteViewModel>(cliente);
     }
 }
 

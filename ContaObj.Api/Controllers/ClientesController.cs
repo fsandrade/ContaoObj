@@ -95,9 +95,9 @@ namespace ContaObj.Api.Controllers
         [HttpDelete("{clienteId}")]
         public async Task<IActionResult> DeleteNome(int clienteId)
         {
-            var inativouCliente = await clienteManager.InativarClienteAsync(clienteId);
+            var clienteDeletado = await clienteManager.InativarClienteAsync(clienteId);
 
-            if(inativouCliente == null)
+            if(clienteDeletado == null)
             {
                 return NotFound();
             }

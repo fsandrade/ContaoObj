@@ -14,7 +14,7 @@ public class NovoCliente
     /// <example>1995-05-30</example>
     public DateTime DataNascimento { get; set; }
 
-    /// <example>15248965</example>
+    /// <example>M</example>
     public char Sexo { get; set; }
 
     /// <example>marlon@teste.com</example>

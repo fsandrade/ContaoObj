@@ -53,7 +53,7 @@ public class ClienteRepository : IClienteRepository
 
   
 
-    public async Task<bool?> InativarClienteAsync(int clienteId)
+    public async Task<Cliente> InativarClienteAsync(int clienteId)
     {
         var clienteConsultado = await context.Clientes.
                                             Include(p => p.Contas)
@@ -66,6 +66,6 @@ public class ClienteRepository : IClienteRepository
 
         clienteConsultado.Inativar();
         await context.SaveChangesAsync();
-        return true;
+        return clienteConsultado;
     }
 }

@@ -9,6 +9,6 @@ public interface IClienteRepository
     Task<IEnumerable<Cliente>> GetClientesAsync();
     Task<Cliente> InsertClienteAsync(Cliente cliente);
     Task<Cliente> UpdateClienteAsync(Cliente cliente);
-    Task<bool?> InativarClienteAsync(int clienteId);
+    Task<Cliente> InativarClienteAsync(int clienteId);
 }
 
