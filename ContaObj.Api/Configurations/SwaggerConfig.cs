@@ -22,6 +22,7 @@ namespace ContaObj.Api.Configurations
                 c.IncludeXmlComments(xmlPath);
                 xmlPath = Path.Combine(AppContext.BaseDirectory, "ContaObj.Domain.xml");
                 c.IncludeXmlComments(xmlPath);
+                c.EnableAnnotations();
             });
         }
 
