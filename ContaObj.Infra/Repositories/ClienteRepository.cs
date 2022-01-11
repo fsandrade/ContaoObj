@@ -23,7 +23,7 @@ public class ClienteRepository : IClienteRepository
             .ToListAsync();
     }
 
-    public async Task<Cliente> GetClienteAsync(int id)
+    public async Task<Cliente?> GetClienteAsync(int id)
     {
         return await context.Clientes.FindAsync(id);
     }
@@ -35,7 +35,7 @@ public class ClienteRepository : IClienteRepository
         return cliente;
     }
 
-    public async Task<Cliente> UpdateClienteAsync(Cliente cliente)
+    public async Task<Cliente?> UpdateClienteAsync(Cliente cliente)
     {
         var clienteConsultado = await context.Clientes
             .Include(x => x.Telefones)
@@ -54,7 +54,7 @@ public class ClienteRepository : IClienteRepository
         return cliente;
     }
 
-    public async Task<Cliente> InativarClienteAsync(int clienteId)
+    public async Task<Cliente?> InativarClienteAsync(int clienteId)
     {
         var clienteConsultado = await context.Clientes.
                                             Include(p => p.Contas)
