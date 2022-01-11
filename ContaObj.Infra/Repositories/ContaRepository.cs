@@ -1,5 +1,4 @@
-﻿
-using ContaObj.Application.Interfaces;
+﻿using ContaObj.Application.Interfaces;
 using ContaObj.Domain.Model;
 using ContaObj.Infra.Database;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +25,7 @@ public class ContaRepository : IContaRepository
 
         contaConsultada.Depositar(valorDeposito);
 
-        //TODO criar nova transacao
+        //TODO criar nova transação
 
         await context.SaveChangesAsync();
         return true;
@@ -68,7 +67,6 @@ public class ContaRepository : IContaRepository
         }
         contaConsultada.Inativar();
         await context.SaveChangesAsync();
-
     }
 
     public async Task<Conta> InsertContaAsync(Conta novaConta)
@@ -101,7 +99,7 @@ public class ContaRepository : IContaRepository
 
     private async Task TransferirDeAgenciaAsync(Conta conta, Conta contaConsultadaParaAlteracao)
     {
-        if(conta.Agencia.Id == contaConsultadaParaAlteracao.Agencia.Id)
+        if (conta.Agencia.Id == contaConsultadaParaAlteracao.Agencia.Id)
         {
             return;
         }

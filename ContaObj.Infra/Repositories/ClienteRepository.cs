@@ -1,5 +1,4 @@
 ﻿using ContaObj.Application.Interfaces;
-using ContaObj.Domain.Enumerations;
 using ContaObj.Domain.Model;
 using ContaObj.Infra.Database;
 using Microsoft.EntityFrameworkCore;
@@ -43,11 +42,11 @@ public class ClienteRepository : IClienteRepository
             .Include(x => x.Endereco)
             .FirstOrDefaultAsync(x => x.Id == cliente.Id);
 
-        if(clienteConsultado == null)
+        if (clienteConsultado == null)
         {
             return null;
         }
-        
+
         context.Entry(clienteConsultado).CurrentValues.SetValues(cliente);
         clienteConsultado.Endereco.AlteraEndereco(cliente.Endereco);
         clienteConsultado.AtualizaTelefones(cliente.Telefones);
@@ -59,7 +58,7 @@ public class ClienteRepository : IClienteRepository
     {
         var clienteConsultado = await context.Clientes.
                                             Include(p => p.Contas)
-                                            .FirstOrDefaultAsync( p=> p.Id == clienteId);
+                                            .FirstOrDefaultAsync(p => p.Id == clienteId);
 
         if (clienteConsultado == null)
         {
