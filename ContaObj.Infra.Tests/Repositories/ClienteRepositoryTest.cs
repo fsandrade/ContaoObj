@@ -101,50 +101,50 @@ namespace ContaObj.Infra.Tests.Repositories
         private async Task UpdateClienteAsync_Sucesso()
         {
             var registros = await InsertRecords();
-            var updatedClient = clienteFaker.Generate();
+            var clienteAtualizado = clienteFaker.Generate();
             var clienteExistente = registros.First();
-            updatedClient.Id = clienteExistente.Id;
-            updatedClient.Endereco.Id = clienteExistente.Endereco.Id;
-            updatedClient.Telefones = clienteExistente.Telefones;
+            clienteAtualizado.Id = clienteExistente.Id;
+            clienteAtualizado.Endereco.Id = clienteExistente.Endereco.Id;
+            clienteAtualizado.Telefones = clienteExistente.Telefones;
 
-            var retorno = await repository.UpdateClienteAsync(updatedClient);
-            retorno.Should().BeEquivalentTo(updatedClient);
+            var retorno = await repository.UpdateClienteAsync(clienteAtualizado);
+            retorno.Should().BeEquivalentTo(clienteAtualizado);
         }
 
         [Fact]
         private async Task UpdateClienteAsync_AdicionaTelefone()
         {
             var registros = await InsertRecords();
-            var updatedClient = registros.First();
+            var clienteAtualizado = registros.First();
             var novoTelefone = new TelefoneFaker(0).Generate();
-            updatedClient.Telefones.Add(novoTelefone);
+            clienteAtualizado.Telefones.Add(novoTelefone);
 
-            var retorno = await repository.UpdateClienteAsync(updatedClient);
-            retorno.Should().BeEquivalentTo(updatedClient);
+            var retorno = await repository.UpdateClienteAsync(clienteAtualizado);
+            retorno.Should().BeEquivalentTo(clienteAtualizado);
         }
 
         [Fact]
         private async Task UpdateClienteAsync_RemoveTelefone()
         {
             var registros = await InsertRecords();
-            var updatedClient = registros.First();
-            updatedClient.Telefones.Remove(updatedClient.Telefones.First());
+            var clienteAtualizado = registros.First();
+            clienteAtualizado.Telefones.Remove(clienteAtualizado.Telefones.First());
 
-            var retorno = await repository.UpdateClienteAsync(updatedClient);
+            var retorno = await repository.UpdateClienteAsync(clienteAtualizado);
 
-            retorno.Should().BeEquivalentTo(updatedClient);
+            retorno.Should().BeEquivalentTo(clienteAtualizado);
         }
 
         [Fact]
         private async Task UpdateClienteAsync_LimpaTelefones()
         {
             var registros = await InsertRecords();
-            var updatedClient = registros.First();
-            updatedClient.Telefones.Clear();
+            var clienteAtualizado = registros.First();
+            clienteAtualizado.Telefones.Clear();
 
-            var retorno = await repository.UpdateClienteAsync(updatedClient);
+            var retorno = await repository.UpdateClienteAsync(clienteAtualizado);
 
-            retorno.Should().BeEquivalentTo(updatedClient);
+            retorno.Should().BeEquivalentTo(clienteAtualizado);
         }
 
         [Fact]
