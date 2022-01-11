@@ -5,7 +5,6 @@ using ContaObj.Application.Mappings;
 using ContaObj.Domain.Model;
 using ContaObj.Domain.ViewModel;
 using ContaObj.FakeData.ClienteData;
-using ContaObj.Infra.Repositories;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;

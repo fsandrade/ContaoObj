@@ -17,7 +17,11 @@ public class ClienteRepository : IClienteRepository
 
     public async Task<IEnumerable<Cliente>> GetClientesAsync()
     {
-        return await context.Clientes.AsNoTracking().ToListAsync();
+        return await context.Clientes
+            .Include(x => x.Telefones)
+            .Include(x => x.Endereco)
+            .AsNoTracking()
+            .ToListAsync();
     }
 
     public async Task<Cliente> GetClienteAsync(int id)
@@ -50,8 +54,6 @@ public class ClienteRepository : IClienteRepository
         await context.SaveChangesAsync();
         return cliente;
     }
-
-  
 
     public async Task<Cliente> InativarClienteAsync(int clienteId)
     {

@@ -7,7 +7,7 @@ public class Endereco
 
     public void AlteraEndereco(Endereco endereco)
     {
-       Id = endereco.Id;
+        Id = endereco.Id;
         Cep = endereco.Cep; 
     }
 }
