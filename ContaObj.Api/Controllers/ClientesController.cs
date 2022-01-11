@@ -22,12 +22,12 @@ public class ClientesController : ControllerBase
     {
         var clientes = await clienteManager.GetClientesAsync();
 
-        if (clientes.Any())
+        if (!clientes.Any())
         {
-            return Ok(clientes);
+            return NotFound();
         }
 
-        return NotFound();
+        return Ok(clientes);
     }
 
     [SwaggerOperation(Summary = "Retorna cliente pelo id")]
