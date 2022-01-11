@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ContaObj.Api;
 
-public class Startup
+public class Startup : IStartup
 {
     public Startup(IConfiguration configuration)
     {
