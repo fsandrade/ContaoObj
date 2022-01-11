@@ -15,9 +15,13 @@ public class ClienteViewModelMappingProfile : Profile
             .ForMember(dest => dest.Status, opt => opt.MapFrom(x => StatusCliente.Ativo));
 
         CreateMap<AlteraCliente, Cliente>();
+
+        CreateMap<NovoTelefone, Telefone>();
         CreateMap<AlteraTelefone, Telefone>();
+        CreateMap<Telefone, TelefoneViewModel>().ReverseMap();
+
         CreateMap<NovoEndereco, Endereco>().ReverseMap();
-        CreateMap<NovoTelefone, Telefone>().ReverseMap();
+        CreateMap<Endereco, EnderecoViewModel>().ReverseMap();
     }
 }
 

@@ -6,7 +6,7 @@ public interface IClienteManager
 {
     Task<ClienteViewModel> GetClienteAsync(int id);
     Task<IEnumerable<ClienteViewModel>> GetClientesAsync();
-    Task<bool?> InativarClienteAsync(int clienteId);
+    Task<ClienteViewModel> InativarClienteAsync(int clienteId);
     Task<ClienteViewModel> InsertClienteAsync(NovoCliente novoCliente);
     Task<ClienteViewModel> UpdateClienteAsync(AlteraCliente alteraCliente);
 }

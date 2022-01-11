@@ -5,26 +5,15 @@ Log.Information("Iniciando WebAPI");
 
 try
 {
-    var builder = WebApplication.CreateBuilder(args);
-
-    builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(ctx.Configuration));
-
-    var startup = new Startup(builder.Configuration);
-    startup.ConfigureServices(builder.Services);
-
-    var app = builder.Build();
-
-    startup.Configure(app, app.Environment);
-
-    app.Run();
+    var builder = WebApplication.CreateBuilder(args)
+        .UseStartup<Startup>();
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "Erro inexperado");
+    Log.Fatal(ex, "Erro inesperado");
 }
 finally
 {
     Log.Information("Finalizando WebApi");
     Log.CloseAndFlush();
 }
-

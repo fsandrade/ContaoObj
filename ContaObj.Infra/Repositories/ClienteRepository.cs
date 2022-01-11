@@ -1,5 +1,4 @@
 ﻿using ContaObj.Application.Interfaces;
-using ContaObj.Domain.Enumerations;
 using ContaObj.Domain.Model;
 using ContaObj.Infra.Database;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +16,11 @@ public class ClienteRepository : IClienteRepository
 
     public async Task<IEnumerable<Cliente>> GetClientesAsync()
     {
-        return await context.Clientes.AsNoTracking().ToListAsync();
+        return await context.Clientes
+            .Include(x => x.Telefones)
+            .Include(x => x.Endereco)
+            .AsNoTracking()
+            .ToListAsync();
     }
 
     public async Task<Cliente> GetClienteAsync(int id)
@@ -39,28 +42,23 @@ public class ClienteRepository : IClienteRepository
             .Include(x => x.Endereco)
             .FirstOrDefaultAsync(x => x.Id == cliente.Id);
 
-        if(clienteConsultado == null)
+        if (clienteConsultado == null)
         {
             return null;
         }
-        
+
         context.Entry(clienteConsultado).CurrentValues.SetValues(cliente);
         clienteConsultado.Endereco.AlteraEndereco(cliente.Endereco);
         clienteConsultado.AtualizaTelefones(cliente.Telefones);
-        UpdateClienteTelefones(clienteConsultado, cliente);
-
         await context.SaveChangesAsync();
         return cliente;
     }
 
-    private void UpdateClienteTelefones(Cliente clienteConsultado, Cliente cliente)
-    { 
-        clienteConsultado.Telefones = cliente.Telefones;
-    }
-
-    public async Task<bool?> InativarClienteAsync(int clienteId)
+    public async Task<Cliente> InativarClienteAsync(int clienteId)
     {
-        var clienteConsultado = await context.Clientes.FindAsync(clienteId);
+        var clienteConsultado = await context.Clientes.
+                                            Include(p => p.Contas)
+                                            .FirstOrDefaultAsync(p => p.Id == clienteId);
 
         if (clienteConsultado == null)
         {
@@ -69,6 +67,6 @@ public class ClienteRepository : IClienteRepository
 
         clienteConsultado.Inativar();
         await context.SaveChangesAsync();
-        return true;
+        return clienteConsultado;
     }
 }

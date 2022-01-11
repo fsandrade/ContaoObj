@@ -1,10 +1,13 @@
 ﻿using FluentValidation.AspNetCore;
 using ContaObj.Application.Validators;
 using ContaObj.Api.Configurations;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ContaObj.Api;
 
-public class Startup
+public class Startup : IStartup
 {
     public Startup(IConfiguration configuration)
     {
@@ -20,6 +23,7 @@ public class Startup
             p.RegisterValidatorsFromAssemblyContaining<NovoClienteValidator>();
         });
 
+        services.TryAddEnumerable(ServiceDescriptor.Transient<IApplicationModelProvider, ProduceResponseTypeModelProvider>());
         services.AdicionaAutoMapper();
 
         services.AdicionaConfiguracaoInjecaoDependencia();
@@ -28,15 +32,20 @@ public class Startup
 
         services.AddEndpointsApiExplorer();
 
-        services.AddSwaggerGen();
+        services.AddSwaggerConfiguration();
+
+        services.AddFluentValidationRulesToSwagger();
     }
 
-    public void Configure(WebApplication app, IWebHostEnvironment environment)
+    public void Configure(WebApplication app)
     {
+        app.UseExceptionHandler("/error");
+
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
+            app.UseDeveloperExceptionPage();
         }
 
         app.UseHttpsRedirection();
