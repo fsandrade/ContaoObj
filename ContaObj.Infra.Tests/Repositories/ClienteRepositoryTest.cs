@@ -34,7 +34,7 @@ namespace ContaObj.Infra.Tests.Repositories
             cliente = clienteFaker.Generate();
         }
 
-        private async Task<List<Cliente>> InsertRecords()
+        public async Task<List<Cliente>> InsertRecords()
         {
             var clientes = clienteFaker.Generate(10);
             foreach (var c in clientes)
@@ -47,7 +47,7 @@ namespace ContaObj.Infra.Tests.Repositories
         }
 
         [Fact]
-        private async Task GetClientesAsync_ComRepositorioPreenchido_DeveHaverRetorno()
+        public async Task GetClientesAsync_ComRepositorioPreenchido_DeveHaverRetorno()
         {
             var registros = await InsertRecords();
             var retorno = await repository.GetClientesAsync();
@@ -57,7 +57,7 @@ namespace ContaObj.Infra.Tests.Repositories
         }
 
         [Fact]
-        private async Task GetClientesAsync_RepositorioVazio()
+        public async Task GetClientesAsync_RepositorioVazio()
         {
             var retorno = await repository.GetClientesAsync();
 
@@ -65,7 +65,7 @@ namespace ContaObj.Infra.Tests.Repositories
         }
 
         [Fact]
-        private async Task GetClienteAsync_RetornaClienteCorretamente()
+        public async Task GetClienteAsync_RetornaClienteCorretamente()
         {
             var registros = await InsertRecords();
             var retorno = await repository.GetClienteAsync(registros.First().Id);
@@ -74,7 +74,7 @@ namespace ContaObj.Infra.Tests.Repositories
         }
 
         [Fact]
-        private async Task GetClienteAsync_RepositorioVazio_RetornaNulo()
+        public async Task GetClienteAsync_RepositorioVazio_RetornaNulo()
         {
             var retorno = await repository.GetClienteAsync(1);
 
@@ -82,7 +82,7 @@ namespace ContaObj.Infra.Tests.Repositories
         }
 
         [Fact]
-        private async Task InsertClienteAsync_Sucesso()
+        public async Task InsertClienteAsync_Sucesso()
         {
             var retorno = await repository.InsertClienteAsync(cliente);
 
@@ -90,7 +90,7 @@ namespace ContaObj.Infra.Tests.Repositories
         }
 
         [Fact]
-        private async Task InsertClienteAsync_RepositorioVazio_RetornaNulo()
+        public async Task InsertClienteAsync_RepositorioVazio_RetornaNulo()
         {
             var retorno = await repository.GetClienteAsync(1);
 
@@ -98,7 +98,7 @@ namespace ContaObj.Infra.Tests.Repositories
         }
 
         [Fact]
-        private async Task UpdateClienteAsync_Sucesso()
+        public async Task UpdateClienteAsync_Sucesso()
         {
             var registros = await InsertRecords();
             var clienteAtualizado = clienteFaker.Generate();
@@ -112,7 +112,7 @@ namespace ContaObj.Infra.Tests.Repositories
         }
 
         [Fact]
-        private async Task UpdateClienteAsync_AdicionaTelefone()
+        public async Task UpdateClienteAsync_AdicionaTelefone()
         {
             var registros = await InsertRecords();
             var clienteAtualizado = registros.First();
@@ -124,7 +124,7 @@ namespace ContaObj.Infra.Tests.Repositories
         }
 
         [Fact]
-        private async Task UpdateClienteAsync_RemoveTelefone()
+        public async Task UpdateClienteAsync_RemoveTelefone()
         {
             var registros = await InsertRecords();
             var clienteAtualizado = registros.First();
@@ -136,7 +136,7 @@ namespace ContaObj.Infra.Tests.Repositories
         }
 
         [Fact]
-        private async Task UpdateClienteAsync_LimpaTelefones()
+        public async Task UpdateClienteAsync_LimpaTelefones()
         {
             var registros = await InsertRecords();
             var clienteAtualizado = registros.First();
@@ -148,7 +148,7 @@ namespace ContaObj.Infra.Tests.Repositories
         }
 
         [Fact]
-        private async Task UpdateClienteAsync_RepositorioVazio_RetornaNulo()
+        public async Task UpdateClienteAsync_RepositorioVazio_RetornaNulo()
         {
             var retorno = await repository.UpdateClienteAsync(cliente);
 
@@ -156,7 +156,7 @@ namespace ContaObj.Infra.Tests.Repositories
         }
 
         [Fact]
-        private async Task InativarClienteAsync_Sucesso()
+        public async Task InativarClienteAsync_Sucesso()
         {
             var registros = await InsertRecords();
 
@@ -166,7 +166,7 @@ namespace ContaObj.Infra.Tests.Repositories
         }
 
         [Fact]
-        private async Task InativarClienteAsync_RepositorioVazio_RetornaNulo()
+        public async Task InativarClienteAsync_RepositorioVazio_RetornaNulo()
         {
             var retorno = await repository.InativarClienteAsync(1);
 
