@@ -1,5 +1,4 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using ContaObj.Application.Interfaces;
 using ContaObj.Domain.ViewModel;
 using ContaObj.Domain.Model;
@@ -23,7 +22,7 @@ public class ClienteManager : IClienteManager
         return mapper.Map<IEnumerable<Cliente>, IEnumerable<ClienteViewModel>>(clientes);
     }
 
-    public async Task<ClienteViewModel> GetClienteAsync(int id)
+    public async Task<ClienteViewModel?> GetClienteAsync(int id)
     {
         var cliente = await clienteRepository.GetClienteAsync(id);
         return mapper.Map<ClienteViewModel>(cliente);
@@ -36,17 +35,16 @@ public class ClienteManager : IClienteManager
         return mapper.Map<ClienteViewModel>(cliente);
     }
 
-    public async Task<ClienteViewModel> UpdateClienteAsync(AlteraCliente alteraCliente)
+    public async Task<ClienteViewModel?> UpdateClienteAsync(AlteraCliente alteraCliente)
     {
         var cliente = mapper.Map<Cliente>(alteraCliente);
         cliente = await clienteRepository.UpdateClienteAsync(cliente);
         return mapper.Map<ClienteViewModel>(cliente);
     }
 
-    public async Task<ClienteViewModel> InativarClienteAsync(int clienteId)
+    public async Task<ClienteViewModel?> InativarClienteAsync(int clienteId)
     {
         var cliente = await clienteRepository.InativarClienteAsync(clienteId);
         return mapper.Map<ClienteViewModel>(cliente);
     }
 }
-
