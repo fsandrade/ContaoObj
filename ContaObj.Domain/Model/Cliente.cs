@@ -10,13 +10,15 @@ public class Cliente
     public DateTime DataNascimento { get; set; }
     public char Sexo { get; set; }
     public string Email { get; set; }
-    public Endereco Endereco { get; set; }
-    public List<Telefone> Telefones { get; set; }
     public StatusCliente Status { get; set; }
+    public Endereco Endereco { get; set; }
+
+    public List<Telefone> Telefones { get; set; }
+
     public List<Conta> Contas { get; set; }
 
     public void Inativar()
-    {       
+    {
         Status = StatusCliente.Inativo;
     }
 
