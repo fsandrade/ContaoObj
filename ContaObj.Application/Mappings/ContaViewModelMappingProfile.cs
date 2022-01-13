@@ -11,7 +11,6 @@ namespace ContaObj.Application.Mappings
         public ContaViewModelMappingProfile()
         {
             CreateMap<ContaViewModel, Conta>().ReverseMap();
-            CreateMap<AlteraConta, Conta>();
             CreateMap<NovaConta, Conta>();
             CreateMap<Transacao, TransacaoViewModel>().ReverseMap();
 
