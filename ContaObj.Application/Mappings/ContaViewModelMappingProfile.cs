@@ -15,8 +15,7 @@ namespace ContaObj.Application.Mappings
             CreateMap<Transacao, TransacaoViewModel> ().ReverseMap();
 
             CreateMap<NovaConta, Conta>()
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(x => StatusConta.Ativa))
-                .ForMember(dest => dest.Limite, opt => opt.MapFrom(x => 500));
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(x => StatusConta.Ativa));
         }
     }
 }
