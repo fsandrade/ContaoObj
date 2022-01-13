@@ -9,7 +9,6 @@ public class ContaConfiguration : IEntityTypeConfiguration<Conta>
 {
     public void Configure(EntityTypeBuilder<Conta> builder)
     {
-        builder.Property(p => p.Status).HasConversion(p => p.ToString(), p => (StatusConta)Enum.Parse(typeof(StatusConta), p));
         builder.HasOne(p => p.Cliente).WithMany().OnDelete(DeleteBehavior.NoAction);
     }
 }

@@ -69,8 +69,24 @@ public class ContaRepository : IContaRepository
         await context.SaveChangesAsync();
     }
 
-    public async Task<Conta> InsertContaAsync(Conta novaConta)
+    public async Task<Conta?> InsertContaAsync(Conta novaConta)
     {
+        var clienteExistente = await context.Clientes.FindAsync(novaConta.Cliente.Id);
+
+        if(clienteExistente == null)
+        {
+            return null;
+        }
+
+        var agenciaExistente = await context.Agencias.FindAsync(novaConta.Agencia.Id);
+
+        if (agenciaExistente == null)
+        {
+            return null;
+        }
+
+        novaConta.Agencia = agenciaExistente;
+        novaConta.Cliente = clienteExistente;
         await context.Contas.AddAsync(novaConta);
         await context.SaveChangesAsync();
         return novaConta;
