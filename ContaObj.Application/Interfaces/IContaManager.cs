@@ -19,5 +19,5 @@ public interface IContaManager
 
     Task<bool?> SacarAsync(int contaId, decimal valorSaque);
 
-    Task<bool?> UpdateContaAsync(AlteraConta alterarConta);
+    Task AlteraLimiteContaAsync(int contaId, decimal novoLimite);
 };

@@ -110,29 +110,22 @@ public class ContasController : ControllerBase
         return Ok(saqueRealizado);
     }
 
-    //retirar altera conta, substiruit para altera limite
-    [SwaggerOperation(Summary = "Altera conta")]
-    [HttpPut("{contaId}")]
-    public async Task<ActionResult<bool?>> UpdateConta([SwaggerParameter("Id da conta")] int contaId, [SwaggerParameter("Conta para alteração")] AlteraConta alteraConta)
+    [SwaggerOperation(Summary = "Altera limite da conta")]
+    [HttpPut("AlteraLimite/{contaId}/{novoLimite}")]
+    public async Task<IActionResult> AlteraLimiteConta(
+        [SwaggerParameter("Id da conta")] int contaId,
+        [SwaggerParameter("Novo valor de limite")] decimal novoLimite)
     {
-        if (contaId != alteraConta.Id)
+
+        try
         {
-            return BadRequest(
-                new ProblemDetails
-                {
-                    Title = "One or more validation errors occurred.",
-                    Status = 400,
-                    Detail = "O Id informado no path é diferente do Id informado no body."
-                });
+            await contaManager.AlteraLimiteContaAsync(contaId, novoLimite);
         }
-
-        var alterouConta = await contaManager.UpdateContaAsync(alteraConta);
-
-        if (alterouConta == null)
+        catch (ApplicationException ex)
         {
             return NotFound();
         }
 
-        return Ok(alterouConta);
+        return Ok();
     }
 }

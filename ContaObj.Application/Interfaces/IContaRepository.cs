@@ -19,6 +19,6 @@ namespace ContaObj.Application.Interfaces
 
         Task<bool?> SacarAsync(int contaId, decimal valorSaque);
 
-        Task<bool?> UpdateContaAsync(Conta alterarConta);
+        Task AlteraLimiteContaAsync(int contaId, decimal novoLimite);
     }
 }

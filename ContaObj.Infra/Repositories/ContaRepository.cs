@@ -133,19 +133,17 @@ public class ContaRepository : IContaRepository
         contaConsultada.AlterarAgencia(agenciaDestino);
     }
 
-    public async Task<bool?> UpdateContaAsync(Conta alterarConta)
+    public async Task AlteraLimiteContaAsync(int contaId, decimal novoLimite)
     {
-        var contaConsultada = await GetContaAsync(alterarConta.Id);
+        var contaConsultada = await GetContaAsync(contaId);
 
         if (contaConsultada == null)
         {
-            return null;
+            throw new ApplicationException("Conta inexistente");
         }
 
-        context.Entry(contaConsultada).CurrentValues.SetValues(alterarConta);
-        await TransferirDeAgenciaAsync(alterarConta, contaConsultada);
+        contaConsultada.AlterarLimite(novoLimite);
 
         await context.SaveChangesAsync();
-        return true;
     }
 }

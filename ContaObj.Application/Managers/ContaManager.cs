@@ -60,10 +60,9 @@ namespace ContaObj.Application.Managers
             return contaRepository.SacarAsync(contaId, valorSaque);
         }
 
-        public async Task<bool?> UpdateContaAsync(AlteraConta alterarConta)
+        public Task AlteraLimiteContaAsync(int contaId, decimal novoLimite)
         {
-            var conta = mapper.Map<Conta>(alterarConta);
-            return await contaRepository.UpdateContaAsync(conta);
+            return contaRepository.AlteraLimiteContaAsync(contaId, novoLimite);
         }
     }
 }

@@ -32,4 +32,9 @@ public class Conta
     {
         Agencia = novaAgencia;
     }
+
+    public void AlterarLimite(decimal novoLimite)
+    {
+        Limite = novoLimite;
+    }
 }
