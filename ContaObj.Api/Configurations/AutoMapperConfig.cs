@@ -7,9 +7,9 @@ namespace ContaObj.Api.Configurations;
         public static void AdicionaAutoMapper(this IServiceCollection services)
         {
             services.AddAutoMapper(
+            typeof(AgenciaViewModelMappingProfile),
             typeof(ClienteViewModelMappingProfile),
-            typeof(ContaViewModelMappingProfile),
-            typeof(AgenciaViewModelMappingProfile));
+            typeof(ContaViewModelMappingProfile));
         }
     }
 
