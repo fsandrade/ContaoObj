@@ -4,6 +4,9 @@ using ContaObj.Api.Configurations;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace ContaObj.Api;
 
@@ -18,10 +21,20 @@ public class Startup : IStartup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddControllers().AddFluentValidation(p =>
-        {
-            p.RegisterValidatorsFromAssemblyContaining<NovoClienteValidator>();
-        });
+        services.AddControllers()
+            .AddFluentValidation(p =>
+            {
+                p.RegisterValidatorsFromAssemblyContaining<NovoClienteValidator>();
+            })
+            .AddNewtonsoftJson(x =>
+            {
+                x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                x.SerializerSettings.Converters.Add(new StringEnumConverter());
+            })
+            .AddJsonOptions(p =>
+            {
+                p.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
 
         services.TryAddEnumerable(ServiceDescriptor.Transient<IApplicationModelProvider, ProduceResponseTypeModelProvider>());
         services.AdicionaAutoMapper();
