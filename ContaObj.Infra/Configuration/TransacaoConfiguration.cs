@@ -8,6 +8,7 @@ namespace ContaObj.Infra.Configuration
     {
         public void Configure(EntityTypeBuilder<Transacao> builder)
         {
+            builder.Property(p => p.Valor).HasColumnType("decimal(18,2)");
         }
     }
 }

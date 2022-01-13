@@ -8,6 +8,8 @@ public class ContaConfiguration : IEntityTypeConfiguration<Conta>
 {
     public void Configure(EntityTypeBuilder<Conta> builder)
     {
+        builder.Property(p => p.Limite).HasColumnType("decimal(18,2)");
+        builder.Property(p => p.Saldo).HasColumnType("decimal(18,2)");
         builder.HasOne(p => p.Cliente).WithMany(p => p.Contas).OnDelete(DeleteBehavior.NoAction);
     }
 }
