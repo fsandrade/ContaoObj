@@ -8,7 +8,6 @@ namespace ContaObj.Application.Mappings
     {
         public AgenciaViewModelMappingProfile()
         {
-            CreateMap<ReferenciaAgencia, Agencia>();
             CreateMap<AgenciaViewModel, Agencia>().ReverseMap();
         }
     }
