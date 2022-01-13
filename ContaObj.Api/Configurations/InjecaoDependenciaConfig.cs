@@ -10,7 +10,9 @@ namespace ContaObj.Api.Configurations
         {
             services.AddScoped<IClienteManager, ClienteManager>();
             services.AddScoped<IClienteRepository, ClienteRepository>();
+            services.AddScoped<IContaManager, ContaManager>();
             services.AddScoped<IContaRepository, ContaRepository>();
+            services.AddScoped<IAgenciaRepository, AgenciaRepository>();
         }
     }
 }

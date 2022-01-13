@@ -13,4 +13,5 @@ public interface IClienteRepository
     Task<Cliente?> UpdateClienteAsync(Cliente cliente);
 
     Task<Cliente?> InativarClienteAsync(int clienteId);
+    Task<bool> ExistsOnDatabaseAsync(int id);
 }

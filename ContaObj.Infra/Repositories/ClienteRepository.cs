@@ -69,4 +69,9 @@ public class ClienteRepository : IClienteRepository
         await context.SaveChangesAsync();
         return clienteConsultado;
     }
+
+    public async Task<bool> ExistsOnDatabaseAsync(int id)
+    {
+        return await context.Clientes.FindAsync(id) != null;
+    }
 }

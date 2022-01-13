@@ -38,7 +38,7 @@ public class ContaRepository : IContaRepository
             .ToListAsync();
     }
 
-    public async Task<Conta> GetContaAsync(int contaId)
+    public async Task<Conta?> GetContaAsync(int contaId)
     {
         return await context.Contas
             .FindAsync(contaId);
@@ -63,7 +63,7 @@ public class ContaRepository : IContaRepository
         var contaConsultada = await context.Contas.FindAsync(contaId);
         if (contaConsultada == null)
         {
-            throw new ApplicationException("Usuário não encontrado");
+            throw new ApplicationException("Conta não encontrada");
         }
         contaConsultada.Inativar();
         await context.SaveChangesAsync();

@@ -46,7 +46,7 @@ namespace ContaObj.Api.Controllers
         }
 
         [SwaggerOperation(Summary = "Consulta transações da conta por período")]
-        [HttpGet("ExtratoPorPeriodo/contaId={contaId}&inicio={inicio}&fim={fim}")]
+        [HttpGet("ExtratoPorPeriodo")]
         public async Task<ActionResult<IEnumerable<TransacaoViewModel>>> ExtratoPorPeriodo(
             [SwaggerParameter("Id da conta")] int contaId,
             [SwaggerParameter("Início do período")] DateTime inicio,
