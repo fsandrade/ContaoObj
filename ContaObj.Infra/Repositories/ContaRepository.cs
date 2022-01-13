@@ -50,6 +50,9 @@ public class ContaRepository : IContaRepository
     public async Task<IEnumerable<Conta>> GetContasAsync()
     {
         return await context.Contas
+            .Include(p => p.Cliente)
+            .Include(p => p.Agencia)
+            .Include(p => p.Agencia.Endereco)
             .AsNoTracking()
             .ToListAsync();
     }
@@ -76,7 +79,7 @@ public class ContaRepository : IContaRepository
     {
         var clienteExistente = await context.Clientes.FindAsync(novaConta.Cliente.Id);
 
-        if(clienteExistente == null)
+        if (clienteExistente == null)
         {
             return null;
         }
@@ -90,6 +93,9 @@ public class ContaRepository : IContaRepository
 
         novaConta.Agencia = agenciaExistente;
         novaConta.Cliente = clienteExistente;
+
+        novaConta.Numero = context.Contas.Max(p => p.Numero) + 1;
+
         await context.Contas.AddAsync(novaConta);
         await context.SaveChangesAsync();
         return novaConta;
