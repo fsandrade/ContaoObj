@@ -1,4 +1,6 @@
-﻿namespace ContaObj.Domain.ViewModel
+﻿using ContaObj.Domain.ViewModel.Conta;
+
+namespace ContaObj.Domain.ViewModel
 {
     public class AlteraConta: NovaConta
     {
