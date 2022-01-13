@@ -1,5 +1,6 @@
 ﻿using ContaObj.Application.Interfaces;
 using ContaObj.Domain.Model;
+using ContaObj.Domain.ViewModel.Conta;
 using ContaObj.Infra.Database;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,21 +15,20 @@ public class ContaRepository : IContaRepository
         this.context = context;
     }
 
-    public async Task<bool?> DepositarAsync(int contaId, decimal valorDeposito)
+    public async Task DepositarAsync(OperacaoPropriaConta deposito)
     {
-        var contaConsultada = await GetContaAsync(contaId);
+        var contaConsultada = await GetContaAsync(deposito.ContaId);
 
         if (contaConsultada == null)
         {
-            return null;
+            throw new ApplicationException("Cliente não encontrado");
         }
 
-        contaConsultada.Depositar(valorDeposito);
+        contaConsultada.Depositar(deposito.Valor);
 
         //TODO criar nova transação
 
         await context.SaveChangesAsync();
-        return true;
     }
 
     public async Task<IEnumerable<Transacao>> ExtratoPorPeriodoAsync(int contaId, DateTime inicio, DateTime fim)
