@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using ContaObj.Domain.Model;
-using ContaObj.Domain.ViewModel;
 using ContaObj.Domain.ViewModel.Agencia;
 
 namespace ContaObj.Application.Mappings
