@@ -41,25 +41,25 @@ namespace ContaObj.Application.Tests.Validators
         [Fact]
         public void ShouldNotHaveErrorWhenValorTransacaoIsOk()
         {
-            var transacao = new OperacaoPropriaConta { ValorTransacao = 10.00M };
+            var transacao = new OperacaoPropriaConta { Valor = 10.00M };
             var result = validator.TestValidate(transacao);
-            result.ShouldNotHaveValidationErrorFor(t => t.ValorTransacao);
+            result.ShouldNotHaveValidationErrorFor(t => t.Valor);
         }
 
         [Fact]
         public void ShouldHaveErrorWhenValorTransacaoIdIsZero()
         {
-            var transacao = new OperacaoPropriaConta { ValorTransacao = 0 };
+            var transacao = new OperacaoPropriaConta { Valor = 0 };
             var result = validator.TestValidate(transacao);
-            result.ShouldHaveValidationErrorFor(t => t.ValorTransacao);
+            result.ShouldHaveValidationErrorFor(t => t.Valor);
         }
 
         [Fact]
         public void ShouldHaveErrorWhenValorTransacaoIsNegative()
         {
-            var transacao = new OperacaoPropriaConta { ValorTransacao = -1 };
+            var transacao = new OperacaoPropriaConta { Valor = -1 };
             var result = validator.TestValidate(transacao);
-            result.ShouldHaveValidationErrorFor(t => t.ValorTransacao);
+            result.ShouldHaveValidationErrorFor(t => t.Valor);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace ContaObj.Application.Validators
         public OperacaoPropriaContaValidator()
         {
             RuleFor(x => x.ContaId).GreaterThan(0);
-            RuleFor(x => x.ValorTransacao).NotNull().GreaterThan(0);
+            RuleFor(x => x.Valor).NotNull().GreaterThan(0);
         }
 
     }
