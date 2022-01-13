@@ -1,4 +1,5 @@
 ﻿using ContaObj.Domain.Enumerations;
+using ContaObj.Domain.ViewModel.Agencia;
 
 namespace ContaObj.Domain.ViewModel
 {

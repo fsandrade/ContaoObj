@@ -1,13 +1,22 @@
-﻿using ContaObj.Domain.ViewModel.Agencia;
-using ContaObj.Domain.ViewModel.Cliente;
+﻿namespace ContaObj.Domain.ViewModel.Conta;
 
-namespace ContaObj.Domain.ViewModel
+public class NovaConta
 {
-    public class NovaConta
-    {
-        public decimal Saldo { get; set; }
-        public decimal Limite { get; set; }
-        public ReferenciaCliente Cliente { get; set; }
-        public ReferenciaAgencia Agencia { get; set; }
-    }
+    /// <summary>
+    /// Limite do cheque especial
+    /// </summary>
+    /// <example>100.15</example>
+    public decimal Limite { get; set; }
+
+    /// <summary>
+    /// Id de um cliente existente
+    /// </summary>
+    /// <example>1</example>
+    public int Cliente { get; set; }
+
+    /// <summary>
+    /// Id de uma agência existente
+    /// </summary>
+    /// <example>3</example>
+    public int Agencia { get; set; }
 }
