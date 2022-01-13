@@ -2,6 +2,7 @@
 using ContaObj.Application.Interfaces;
 using ContaObj.Domain.Model;
 using ContaObj.Domain.ViewModel;
+using ContaObj.Domain.ViewModel.Conta;
 
 namespace ContaObj.Application.Managers
 {
@@ -16,9 +17,9 @@ namespace ContaObj.Application.Managers
             this.mapper = mapper;
         }
 
-        public Task<bool?> DepositarAsync(int contaId, decimal valorDeposito)
+        public Task DepositarAsync(OperacaoPropriaConta deposito)
         {
-            return contaRepository.DepositarAsync(contaId, valorDeposito);
+            return contaRepository.DepositarAsync(deposito);
         }
 
         public Task<IEnumerable<TransacaoViewModel>> ExtratoPorPeriodoAsync(int contaId, DateTime inicio, DateTime fim)
@@ -49,10 +50,14 @@ namespace ContaObj.Application.Managers
             await contaRepository.InativarContaAsync(contaId);
         }
 
-        public async Task<ContaViewModel> InsertContaAsync(NovaConta novaConta)
+        public async Task<ContaViewModel?> InsertContaAsync(NovaConta novaConta)
         {
             var conta = mapper.Map<Conta>(novaConta);
             conta = await contaRepository.InsertContaAsync(conta);
+            if (conta is null)
+            {
+                return null;
+            }
             return mapper.Map<ContaViewModel>(conta);
         }
 
