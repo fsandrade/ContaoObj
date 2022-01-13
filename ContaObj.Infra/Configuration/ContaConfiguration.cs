@@ -1,5 +1,4 @@
-﻿using ContaObj.Domain.Enumerations;
-using ContaObj.Domain.Model;
+﻿using ContaObj.Domain.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,6 +8,6 @@ public class ContaConfiguration : IEntityTypeConfiguration<Conta>
 {
     public void Configure(EntityTypeBuilder<Conta> builder)
     {
-        builder.HasOne(p => p.Cliente).WithMany().OnDelete(DeleteBehavior.NoAction);
+        builder.HasOne(p => p.Cliente).WithMany(p => p.Contas).OnDelete(DeleteBehavior.NoAction);
     }
 }
