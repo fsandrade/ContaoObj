@@ -41,7 +41,10 @@ public class ContaRepository : IContaRepository
     public async Task<Conta?> GetContaAsync(int contaId)
     {
         return await context.Contas
-            .FindAsync(contaId);
+            .Include(x => x.Agencia)
+            .Include(x => x.Cliente)
+            .Where(x => x.Id == contaId)
+            .FirstOrDefaultAsync();
     }
 
     public async Task<IEnumerable<Conta>> GetContasAsync()
