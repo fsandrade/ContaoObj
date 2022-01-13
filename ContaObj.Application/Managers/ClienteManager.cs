@@ -47,4 +47,10 @@ public class ClienteManager : IClienteManager
         var cliente = await clienteRepository.InativarClienteAsync(clienteId);
         return mapper.Map<ClienteViewModel>(cliente);
     }
+
+    public async Task<IEnumerable<ContaViewModel>> GetContasPorClienteAsync(int clienteId)
+    {
+        var contas = await clienteRepository.GetContasPorClienteAsync(clienteId);
+        return mapper.Map<IEnumerable<Conta>, IEnumerable<ContaViewModel>>(contas);
+    }
 }

@@ -89,4 +89,18 @@ public class ClientesController : ControllerBase
 
         return NoContent();
     }
+
+    [SwaggerOperation(Summary = "Consulta todas as contas de um cliente")]
+    [HttpGet("ContasPorCliente/{clienteId}")]
+    public async Task<ActionResult<IEnumerable<ContaViewModel>>> ContasPorCliente([SwaggerParameter("Id do cliente")] int clienteId)
+    {
+        var contasDoCliente = await clienteManager.GetContasPorClienteAsync(clienteId);
+
+        if (contasDoCliente == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(contasDoCliente);
+    }
 }

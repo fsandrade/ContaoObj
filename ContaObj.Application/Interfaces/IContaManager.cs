@@ -13,8 +13,6 @@ public interface IContaManager
 
     Task<IEnumerable<ContaViewModel>> GetContasAsync();
 
-    Task<IEnumerable<ContaViewModel>> GetContasPorClienteAsync(int clienteId);
-
     Task InativarContaAsync(int contaId);
 
     Task<ContaViewModel?> InsertContaAsync(NovaConta novaConta);

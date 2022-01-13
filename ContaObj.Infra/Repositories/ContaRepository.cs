@@ -57,13 +57,6 @@ public class ContaRepository : IContaRepository
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<Conta>> GetContasPorClienteAsync(int clienteId)
-    {
-        return await context.Contas
-            .Where(x => x.Cliente.Id == clienteId)
-            .ToListAsync();
-    }
-
     public async Task InativarContaAsync(int contaId)
     {
         var contaConsultada = await context.Contas.FindAsync(contaId);

@@ -13,8 +13,6 @@ namespace ContaObj.Application.Interfaces
 
         Task<IEnumerable<Conta>> GetContasAsync();
 
-        Task<IEnumerable<Conta>> GetContasPorClienteAsync(int clienteId);
-
         Task InativarContaAsync(int contaId);
 
         Task<Conta> InsertContaAsync(Conta novaConta);

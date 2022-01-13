@@ -13,4 +13,6 @@ public interface IClienteManager
     Task<ClienteViewModel> InsertClienteAsync(NovoCliente novoCliente);
 
     Task<ClienteViewModel?> UpdateClienteAsync(AlteraCliente alteraCliente);
+
+    Task<IEnumerable<ContaViewModel>> GetContasPorClienteAsync(int clienteId);
 }

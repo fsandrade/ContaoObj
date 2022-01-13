@@ -39,12 +39,6 @@ namespace ContaObj.Application.Managers
             return mapper.Map<IEnumerable<Conta>, IEnumerable<ContaViewModel>>(contas);
         }
 
-        public async Task<IEnumerable<ContaViewModel>> GetContasPorClienteAsync(int clienteId)
-        {
-            var contas = await contaRepository.GetContasPorClienteAsync(clienteId);
-            return mapper.Map<IEnumerable<Conta>, IEnumerable<ContaViewModel>>(contas);
-        }
-
         public async Task InativarContaAsync(int contaId)
         {
             await contaRepository.InativarContaAsync(contaId);

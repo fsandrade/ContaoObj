@@ -70,6 +70,13 @@ public class ClienteRepository : IClienteRepository
         return clienteConsultado;
     }
 
+    public async Task<IEnumerable<Conta>> GetContasPorClienteAsync(int clienteId)
+    {
+        return await context.Contas
+            .Where(x => x.Cliente.Id == clienteId)
+            .ToListAsync();
+    }
+
     public async Task<bool> ExistsOnDatabaseAsync(int id)
     {
         return await context.Clientes.FindAsync(id) != null;

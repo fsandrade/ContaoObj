@@ -78,19 +78,6 @@ public class ContasController : ControllerBase
         return Ok(contasExistentes);
     }
 
-    [SwaggerOperation(Summary = "Consulta todas as contas de um cliente")]
-    [HttpGet("ContasPorCliente/{clienteId}")]
-    public async Task<ActionResult<IEnumerable<ContaViewModel>>> ContasPorCliente([SwaggerParameter("Id do cliente")] int clienteId)
-    {
-        var contasDoCliente = await contaManager.GetContasPorClienteAsync(clienteId);
-
-        if (contasDoCliente == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(contasDoCliente);
-    }
 
     [SwaggerOperation(Summary = "Inativa uma conta específica")]
     [HttpDelete("{contaId}")]
@@ -123,6 +110,7 @@ public class ContasController : ControllerBase
         return Ok(saqueRealizado);
     }
 
+    //retirar altera conta, substiruit para altera limite
     [SwaggerOperation(Summary = "Altera conta")]
     [HttpPut("{contaId}")]
     public async Task<ActionResult<bool?>> UpdateConta([SwaggerParameter("Id da conta")] int contaId, [SwaggerParameter("Conta para alteração")] AlteraConta alteraConta)
