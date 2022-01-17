@@ -17,7 +17,7 @@ namespace ContaObj.Application.Interfaces
 
         Task<Conta> InsertContaAsync(Conta novaConta);
 
-        Task<bool?> SacarAsync(int contaId, decimal valorSaque);
+        Task SacarAsync(OperacaoPropriaConta saque);
 
         Task AlteraLimiteContaAsync(int contaId, decimal novoLimite);
     }

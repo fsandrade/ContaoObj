@@ -17,7 +17,7 @@ public interface IContaManager
 
     Task<ContaViewModel?> InsertContaAsync(NovaConta novaConta);
 
-    Task<bool?> SacarAsync(int contaId, decimal valorSaque);
+    Task SacarAsync(OperacaoPropriaConta saque);
 
     Task AlteraLimiteContaAsync(int contaId, decimal novoLimite);
 };

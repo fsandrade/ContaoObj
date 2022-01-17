@@ -100,14 +100,15 @@ public class ContasController : ControllerBase
     [HttpPut("Sacar")]
     public async Task<ActionResult<bool?>> Sacar([SwaggerParameter("Id da conta")] OperacaoPropriaConta saque)
     {
-        var saqueRealizado = await contaManager.SacarAsync(saque.ContaId, saque.Valor);
-
-        if (saqueRealizado == null)
+        try
+        {
+            await contaManager.SacarAsync(saque);
+        }
+        catch (ApplicationException ex)
         {
             return NotFound();
         }
-
-        return Ok(saqueRealizado);
+        return Ok();
     }
 
     [SwaggerOperation(Summary = "Altera limite da conta")]

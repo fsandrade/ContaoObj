@@ -21,7 +21,7 @@ public class ContaRepository : IContaRepository
 
         if (contaConsultada == null)
         {
-            throw new ApplicationException("Cliente não encontrado");
+            throw new ApplicationException("Conta não encontrada");
         }
 
         contaConsultada.Depositar(deposito.Valor);
@@ -94,38 +94,43 @@ public class ContaRepository : IContaRepository
         return novaConta;
     }
 
-    public async Task<bool?> SacarAsync(int contaId, decimal valorSaque)
+    public async Task SacarAsync(OperacaoPropriaConta saque)
     {
-        var contaConsultada = await GetContaAsync(contaId);
+        var contaConsultada = await GetContaAsync(saque.ContaId);
 
         if (contaConsultada == null)
         {
-            return null;
+            throw new ApplicationException("Conta não encontrada");
         }
 
-        if (contaConsultada.Saldo + contaConsultada.Limite < valorSaque)
+        if (contaConsultada.Saldo + contaConsultada.Limite < saque.Valor)
         {
             throw new ApplicationException("Saldo insuficiente");
         }
 
         //TODO criar nova transação
-        contaConsultada.Sacar(valorSaque);
+        contaConsultada.Sacar(saque.Valor);
 
         await context.SaveChangesAsync();
-        return true;
     }
 
-    private async Task TransferirDeAgenciaAsync(Conta conta, Conta contaConsultadaParaAlteracao)
+    public async Task TransferirDeAgenciaAsync(Conta conta, int novaAgenciaId)
     {
-        if (conta.Agencia.Id == contaConsultadaParaAlteracao.Agencia.Id)
+        if (conta.Agencia.Id == novaAgenciaId)
         {
-            return;
+            throw new ApplicationException("A conta não pode ser transferida para a mesma agência");
         }
 
         var contaConsultada = await GetContaAsync(conta.Id);
+
+        if (contaConsultada == null)
+        {
+            throw new ApplicationException("Conta inexistente");
+        }
+
         var agenciaDestino = await context.Agencias.FindAsync(conta.Agencia.Id);
 
-        if (contaConsultada == null || agenciaDestino == null)
+        if (agenciaDestino == null)
         {
             throw new ApplicationException("Nova agência inexistente");
         }
