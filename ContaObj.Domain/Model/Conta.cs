@@ -37,4 +37,9 @@ public class Conta
     {
         Limite = novoLimite;
     }
+
+    public Conta Clone()
+    {
+        return (Conta)MemberwiseClone();
+    }
 }
