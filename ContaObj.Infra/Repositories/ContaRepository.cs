@@ -34,7 +34,7 @@ public class ContaRepository : IContaRepository
     public async Task<IEnumerable<Transacao>> ExtratoPorPeriodoAsync(int contaId, DateTime inicio, DateTime fim)
     {
         return await context.Transacoes
-            .Where(x => (x.Origem.Id == contaId || x.Destino.Id == contaId) && x.Data >= inicio && x.Data <= fim)
+            .Where(x => (x.Origem.Id == contaId || x.Destino.Id == contaId) && x.Data.Date >= inicio && x.Data.Date <= fim)
             .ToListAsync();
     }
 
@@ -87,7 +87,7 @@ public class ContaRepository : IContaRepository
         novaConta.Agencia = agenciaExistente;
         novaConta.Cliente = clienteExistente;
 
-        novaConta.Numero = context.Contas.Max(p => p.Numero) + 1;
+        novaConta.Numero = context.Contas.Any() ? context.Contas.Max(p => p.Numero) + 1 : 1;
 
         await context.Contas.AddAsync(novaConta);
         await context.SaveChangesAsync();
@@ -128,7 +128,7 @@ public class ContaRepository : IContaRepository
             throw new ApplicationException("Conta inexistente");
         }
 
-        var agenciaDestino = await context.Agencias.FindAsync(conta.Agencia.Id);
+        var agenciaDestino = await context.Agencias.FindAsync(novaAgenciaId);
 
         if (agenciaDestino == null)
         {
