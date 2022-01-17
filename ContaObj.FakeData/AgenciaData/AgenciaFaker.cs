@@ -15,7 +15,6 @@ namespace ContaObj.FakeData.AgenciaData
             RuleFor(p => p.Numero, f => id);
             RuleFor(p => p.Nome, f => f.Company.CompanyName());
             RuleFor(p => p.Endereco, f => new EnderecoFaker().Generate());
-            RuleFor(p => p.Contas, f => new ContaFaker().Generate(3));
             RuleFor(p => p.Banco, f => new BancoFaker().Generate());
         }
     }
