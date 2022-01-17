@@ -20,5 +20,7 @@ namespace ContaObj.Application.Interfaces
         Task SacarAsync(OperacaoPropriaConta saque);
 
         Task AlteraLimiteContaAsync(int contaId, decimal novoLimite);
+
+        Task TransferirDeAgenciaAsync(Conta conta, int novaAgenciaId);
     }
 }
