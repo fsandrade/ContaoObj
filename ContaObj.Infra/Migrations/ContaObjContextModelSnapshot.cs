@@ -189,11 +189,9 @@ namespace ContaObj.Infra.Migrations
 
             modelBuilder.Entity("ContaObj.Domain.Model.Transacao", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Data")
                         .HasColumnType("datetime2");

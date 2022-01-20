@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using ContaObj.Application.Validators.Transacao;
 
 namespace ContaObj.Api;
 
@@ -25,6 +26,7 @@ public class Startup : IStartup
             .AddFluentValidation(p =>
             {
                 p.RegisterValidatorsFromAssemblyContaining<NovoClienteValidator>();
+                p.RegisterValidatorsFromAssemblyContaining<NovaTransacaoValidator>();
             })
             .AddNewtonsoftJson(x =>
             {
@@ -39,7 +41,7 @@ public class Startup : IStartup
         services.TryAddEnumerable(ServiceDescriptor.Transient<IApplicationModelProvider, ProduceResponseTypeModelProvider>());
         services.AdicionaAutoMapper();
 
-        services.AdicionaConfiguracaoInjecaoDependencia();
+        services.AdicionaConfiguracaoInjecaoDependencia(Configuration);
 
         services.AdicionarConfiguracaoDatabase(Configuration);
 

@@ -18,14 +18,14 @@ public class Conta
         Status = StatusConta.Inativa;
     }
 
-    public void Sacar(decimal valorSaque)
+    public void DebitaSaldo(decimal valor)
     {
-        Saldo -= valorSaque;
+        Saldo -= valor;
     }
 
-    public void Depositar(decimal valorDeposito)
+    public void CreditaSaldo(decimal valor)
     {
-        Saldo += valorDeposito;
+        Saldo += valor;
     }
 
     public void AlterarAgencia(Agencia novaAgencia)
@@ -36,6 +36,11 @@ public class Conta
     public void AlterarLimite(decimal novoLimite)
     {
         Limite = novoLimite;
+    }
+
+    public bool PossuiSaldoParaTransacao(decimal valor)
+    {
+        return valor <= (Saldo + Limite);
     }
 
     public Conta Clone()

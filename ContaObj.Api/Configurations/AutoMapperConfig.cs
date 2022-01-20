@@ -2,14 +2,14 @@
 
 namespace ContaObj.Api.Configurations;
 
-    public static class AutoMapperConfig
+public static class AutoMapperConfig
+{
+    public static void AdicionaAutoMapper(this IServiceCollection services)
     {
-        public static void AdicionaAutoMapper(this IServiceCollection services)
-        {
-            services.AddAutoMapper(
-            typeof(AgenciaViewModelMappingProfile),
-            typeof(ClienteViewModelMappingProfile),
-            typeof(ContaViewModelMappingProfile));
-        }
+        services.AddAutoMapper(
+        typeof(AgenciaViewModelMappingProfile),
+        typeof(ClienteViewModelMappingProfile),
+        typeof(ContaViewModelMappingProfile),
+        typeof(TransacaoMappingProfile));
     }
-
+}

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ContaObj.Infra.Migrations
 {
     [DbContext(typeof(ContaObjContext))]
-    [Migration("20220103200336_initial")]
+    [Migration("20220119165223_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,7 +51,7 @@ namespace ContaObj.Infra.Migrations
 
                     b.HasIndex("EnderecoId");
 
-                    b.ToTable("Agencia");
+                    b.ToTable("Agencias");
                 });
 
             modelBuilder.Entity("ContaObj.Domain.Model.Banco", b =>
@@ -101,11 +101,15 @@ namespace ContaObj.Infra.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(1)");
 
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("EnderecoId");
 
-                    b.ToTable("Cliente");
+                    b.ToTable("Clientes");
                 });
 
             modelBuilder.Entity("ContaObj.Domain.Model.Conta", b =>
@@ -122,9 +126,6 @@ namespace ContaObj.Infra.Migrations
                     b.Property<int>("ClienteId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ClienteId1")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Limite")
                         .HasColumnType("decimal(18,2)");
 
@@ -134,15 +135,16 @@ namespace ContaObj.Infra.Migrations
                     b.Property<decimal>("Saldo")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AgenciaId");
 
                     b.HasIndex("ClienteId");
 
-                    b.HasIndex("ClienteId1");
-
-                    b.ToTable("Conta");
+                    b.ToTable("Contas");
                 });
 
             modelBuilder.Entity("ContaObj.Domain.Model.Endereco", b =>
@@ -159,7 +161,7 @@ namespace ContaObj.Infra.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Endereco");
+                    b.ToTable("Enderecos");
                 });
 
             modelBuilder.Entity("ContaObj.Domain.Model.Telefone", b =>
@@ -170,29 +172,28 @@ namespace ContaObj.Infra.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("ClienteId")
+                    b.Property<int>("ClienteId")
                         .HasColumnType("int");
 
                     b.Property<int>("Ddd")
                         .HasColumnType("int");
 
-                    b.Property<int>("Numero")
-                        .HasColumnType("int");
+                    b.Property<string>("Numero")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClienteId");
 
-                    b.ToTable("Telefone");
+                    b.ToTable("Telefones");
                 });
 
             modelBuilder.Entity("ContaObj.Domain.Model.Transacao", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Data")
                         .HasColumnType("datetime2");
@@ -201,6 +202,9 @@ namespace ContaObj.Infra.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("OrigemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<int>("Tipo")
@@ -215,7 +219,7 @@ namespace ContaObj.Infra.Migrations
 
                     b.HasIndex("OrigemId");
 
-                    b.ToTable("Transacao");
+                    b.ToTable("Transacoes");
                 });
 
             modelBuilder.Entity("ContaObj.Domain.Model.Agencia", b =>
@@ -257,14 +261,10 @@ namespace ContaObj.Infra.Migrations
                         .IsRequired();
 
                     b.HasOne("ContaObj.Domain.Model.Cliente", "Cliente")
-                        .WithMany()
+                        .WithMany("Contas")
                         .HasForeignKey("ClienteId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-
-                    b.HasOne("ContaObj.Domain.Model.Cliente", null)
-                        .WithMany("Contas")
-                        .HasForeignKey("ClienteId1");
 
                     b.Navigation("Agencia");
 
@@ -273,9 +273,13 @@ namespace ContaObj.Infra.Migrations
 
             modelBuilder.Entity("ContaObj.Domain.Model.Telefone", b =>
                 {
-                    b.HasOne("ContaObj.Domain.Model.Cliente", null)
+                    b.HasOne("ContaObj.Domain.Model.Cliente", "Cliente")
                         .WithMany("Telefones")
-                        .HasForeignKey("ClienteId");
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
                 });
 
             modelBuilder.Entity("ContaObj.Domain.Model.Transacao", b =>

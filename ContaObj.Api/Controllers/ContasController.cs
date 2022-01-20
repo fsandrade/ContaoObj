@@ -2,6 +2,7 @@
 using ContaObj.Domain.Enumerations;
 using ContaObj.Domain.ViewModel;
 using ContaObj.Domain.ViewModel.Conta;
+using ContaObj.Domain.ViewModel.Transacao;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -35,7 +36,7 @@ public class ContasController : ControllerBase
 
     [SwaggerOperation(Summary = "Consulta transações da conta por período")]
     [HttpGet("ExtratoPorPeriodo")]
-    public async Task<ActionResult<IEnumerable<TransacaoViewModel>>> ExtratoPorPeriodo(
+    public async Task<ActionResult<IEnumerable<NovaTransacao>>> ExtratoPorPeriodo(
         [SwaggerParameter("Id da conta")] int contaId,
         [SwaggerParameter("Início do período")] DateTime inicio,
         [SwaggerParameter("Fim do período")] DateTime fim)
@@ -78,7 +79,6 @@ public class ContasController : ControllerBase
         return Ok(contasExistentes);
     }
 
-
     [SwaggerOperation(Summary = "Inativa uma conta específica")]
     [HttpDelete("{contaId}")]
     public async Task<IActionResult> InativarConta([SwaggerParameter("Id da conta")] int contaId)
@@ -117,7 +117,6 @@ public class ContasController : ControllerBase
         [SwaggerParameter("Id da conta")] int contaId,
         [SwaggerParameter("Novo valor de limite")] decimal novoLimite)
     {
-
         try
         {
             await contaManager.AlteraLimiteContaAsync(contaId, novoLimite);

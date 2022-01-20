@@ -3,6 +3,7 @@ using ContaObj.Domain.Enumerations;
 using ContaObj.Domain.Model;
 using ContaObj.Domain.ViewModel;
 using ContaObj.Domain.ViewModel.Conta;
+using ContaObj.Domain.ViewModel.Transacao;
 
 namespace ContaObj.Application.Mappings
 {
@@ -12,7 +13,7 @@ namespace ContaObj.Application.Mappings
         {
             CreateMap<ContaViewModel, Conta>().ReverseMap();
             CreateMap<NovaConta, Conta>();
-            CreateMap<Transacao, TransacaoViewModel>().ReverseMap();
+            CreateMap<Transacao, NovaTransacao>().ReverseMap();
 
             CreateMap<NovaConta, Conta>()
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(x => StatusConta.Ativa))

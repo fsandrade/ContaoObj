@@ -79,7 +79,7 @@ namespace ContaObj.Infra.Tests.Repositories
             var transacoes = new TransacaoFaker(contaOrigem, contaDestino).Generate(quantidade);
             foreach (var t in transacoes)
             {
-                t.Id = 0;
+                t.Id = Guid.NewGuid();
                 await context.Transacoes.AddAsync(t);
             }
             await context.SaveChangesAsync();

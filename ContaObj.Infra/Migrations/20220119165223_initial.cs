@@ -23,7 +23,7 @@ namespace ContaObj.Infra.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Endereco",
+                name: "Enderecos",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -32,11 +32,11 @@ namespace ContaObj.Infra.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Endereco", x => x.Id);
+                    table.PrimaryKey("PK_Enderecos", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Agencia",
+                name: "Agencias",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -48,47 +48,48 @@ namespace ContaObj.Infra.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Agencia", x => x.Id);
+                    table.PrimaryKey("PK_Agencias", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Agencia_Banco_BancoId",
+                        name: "FK_Agencias_Banco_BancoId",
                         column: x => x.BancoId,
                         principalTable: "Banco",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Agencia_Endereco_EnderecoId",
+                        name: "FK_Agencias_Enderecos_EnderecoId",
                         column: x => x.EnderecoId,
-                        principalTable: "Endereco",
+                        principalTable: "Enderecos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Cliente",
+                name: "Clientes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Documento = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EnderecoId = table.Column<int>(type: "int", nullable: false),
                     DataNascimento = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Sexo = table.Column<string>(type: "nvarchar(1)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EnderecoId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cliente", x => x.Id);
+                    table.PrimaryKey("PK_Clientes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Cliente_Endereco_EnderecoId",
+                        name: "FK_Clientes_Enderecos_EnderecoId",
                         column: x => x.EnderecoId,
-                        principalTable: "Endereco",
+                        principalTable: "Enderecos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Conta",
+                name: "Contas",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -98,144 +99,135 @@ namespace ContaObj.Infra.Migrations
                     Limite = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ClienteId = table.Column<int>(type: "int", nullable: false),
                     AgenciaId = table.Column<int>(type: "int", nullable: false),
-                    ClienteId1 = table.Column<int>(type: "int", nullable: true)
+                    Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Conta", x => x.Id);
+                    table.PrimaryKey("PK_Contas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Conta_Agencia_AgenciaId",
+                        name: "FK_Contas_Agencias_AgenciaId",
                         column: x => x.AgenciaId,
-                        principalTable: "Agencia",
+                        principalTable: "Agencias",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Conta_Cliente_ClienteId",
+                        name: "FK_Contas_Clientes_ClienteId",
                         column: x => x.ClienteId,
-                        principalTable: "Cliente",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Conta_Cliente_ClienteId1",
-                        column: x => x.ClienteId1,
-                        principalTable: "Cliente",
+                        principalTable: "Clientes",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "Telefone",
+                name: "Telefones",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Ddd = table.Column<int>(type: "int", nullable: false),
-                    Numero = table.Column<int>(type: "int", nullable: false),
-                    ClienteId = table.Column<int>(type: "int", nullable: true)
+                    Numero = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ClienteId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Telefone", x => x.Id);
+                    table.PrimaryKey("PK_Telefones", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Telefone_Cliente_ClienteId",
+                        name: "FK_Telefones_Clientes_ClienteId",
                         column: x => x.ClienteId,
-                        principalTable: "Cliente",
-                        principalColumn: "Id");
+                        principalTable: "Clientes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Transacao",
+                name: "Transacoes",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Valor = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Data = table.Column<DateTime>(type: "datetime2", nullable: false),
                     OrigemId = table.Column<int>(type: "int", nullable: true),
                     DestinoId = table.Column<int>(type: "int", nullable: true),
-                    Tipo = table.Column<int>(type: "int", nullable: false)
+                    Tipo = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Transacao", x => x.Id);
+                    table.PrimaryKey("PK_Transacoes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Transacao_Conta_DestinoId",
+                        name: "FK_Transacoes_Contas_DestinoId",
                         column: x => x.DestinoId,
-                        principalTable: "Conta",
+                        principalTable: "Contas",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Transacao_Conta_OrigemId",
+                        name: "FK_Transacoes_Contas_OrigemId",
                         column: x => x.OrigemId,
-                        principalTable: "Conta",
+                        principalTable: "Contas",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Agencia_BancoId",
-                table: "Agencia",
+                name: "IX_Agencias_BancoId",
+                table: "Agencias",
                 column: "BancoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Agencia_EnderecoId",
-                table: "Agencia",
+                name: "IX_Agencias_EnderecoId",
+                table: "Agencias",
                 column: "EnderecoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cliente_EnderecoId",
-                table: "Cliente",
+                name: "IX_Clientes_EnderecoId",
+                table: "Clientes",
                 column: "EnderecoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Conta_AgenciaId",
-                table: "Conta",
+                name: "IX_Contas_AgenciaId",
+                table: "Contas",
                 column: "AgenciaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Conta_ClienteId",
-                table: "Conta",
+                name: "IX_Contas_ClienteId",
+                table: "Contas",
                 column: "ClienteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Conta_ClienteId1",
-                table: "Conta",
-                column: "ClienteId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Telefone_ClienteId",
-                table: "Telefone",
+                name: "IX_Telefones_ClienteId",
+                table: "Telefones",
                 column: "ClienteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transacao_DestinoId",
-                table: "Transacao",
+                name: "IX_Transacoes_DestinoId",
+                table: "Transacoes",
                 column: "DestinoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transacao_OrigemId",
-                table: "Transacao",
+                name: "IX_Transacoes_OrigemId",
+                table: "Transacoes",
                 column: "OrigemId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Telefone");
+                name: "Telefones");
 
             migrationBuilder.DropTable(
-                name: "Transacao");
+                name: "Transacoes");
 
             migrationBuilder.DropTable(
-                name: "Conta");
+                name: "Contas");
 
             migrationBuilder.DropTable(
-                name: "Agencia");
+                name: "Agencias");
 
             migrationBuilder.DropTable(
-                name: "Cliente");
+                name: "Clientes");
 
             migrationBuilder.DropTable(
                 name: "Banco");
 
             migrationBuilder.DropTable(
-                name: "Endereco");
+                name: "Enderecos");
         }
     }
 }

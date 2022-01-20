@@ -1,5 +1,6 @@
 ﻿using ContaObj.Domain.ViewModel;
 using ContaObj.Domain.ViewModel.Conta;
+using ContaObj.Domain.ViewModel.Transacao;
 
 namespace ContaObj.Application.Interfaces;
 
@@ -7,7 +8,7 @@ public interface IContaManager
 {
     Task DepositarAsync(OperacaoPropriaConta deposito);
 
-    Task<IEnumerable<TransacaoViewModel>> ExtratoPorPeriodoAsync(int contaId, DateTime inicio, DateTime fim);
+    Task<IEnumerable<NovaTransacao>> ExtratoPorPeriodoAsync(int contaId, DateTime inicio, DateTime fim);
 
     Task<ContaViewModel> GetContaAsync(int contaId);
 

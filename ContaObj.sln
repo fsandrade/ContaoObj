@@ -13,13 +13,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContaObj.Application", "Con
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "05.ContaObj.Tests", "05.ContaObj.Tests", "{80DC0941-8749-4881-9174-94B0C6A11757}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContaObj.Api.tests", "ContaObj.Api.tests\ContaObj.Api.tests.csproj", "{3C87A4E0-D672-4111-A62B-D030CCFE229F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContaObj.Api.tests", "ContaObj.Api.tests\ContaObj.Api.tests.csproj", "{3C87A4E0-D672-4111-A62B-D030CCFE229F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContaObj.Application.Tests", "ContaObj.Application.Tests\ContaObj.Application.Tests.csproj", "{95F5CCC1-44CB-4D88-89C3-D79C73435161}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContaObj.Application.Tests", "ContaObj.Application.Tests\ContaObj.Application.Tests.csproj", "{95F5CCC1-44CB-4D88-89C3-D79C73435161}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContaObj.Domain.Tests", "ContaObj.Domain.Tests\ContaObj.Domain.Tests.csproj", "{93967EE3-C6AC-422A-914A-6555CB75153E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContaObj.Domain.Tests", "ContaObj.Domain.Tests\ContaObj.Domain.Tests.csproj", "{93967EE3-C6AC-422A-914A-6555CB75153E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContaObj.Infra.Tests", "ContaObj.Infra.Tests\ContaObj.Infra.Tests.csproj", "{E1EE9803-A983-47C1-AD13-9D9B30CCE4A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContaObj.Infra.Tests", "ContaObj.Infra.Tests\ContaObj.Infra.Tests.csproj", "{E1EE9803-A983-47C1-AD13-9D9B30CCE4A9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01.ContaObj.Api", "01.ContaObj.Api", "{566DB27B-1171-4429-91EE-DC4D4D9B5E62}"
 EndProject
@@ -29,7 +29,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03.ContaObj.Domain", "03.Co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04.ContaObj.Infra", "04.ContaObj.Infra", "{07D6EA00-405C-44A8-90D2-64D78E75BA45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContaObj.FakeData", "ContaObj.FakeData\ContaObj.FakeData.csproj", "{478669F1-A675-4E39-9111-273923359B29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContaObj.FakeData", "ContaObj.FakeData\ContaObj.FakeData.csproj", "{478669F1-A675-4E39-9111-273923359B29}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01.ContaObj.Services", "01.ContaObj.Services", "{43D26106-0705-4E89-AB90-1BD5CB6C7E6D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContaObj.Consumer", "ContaObj.Consumer\ContaObj.Consumer.csproj", "{7E70C277-D614-4EDF-9DDC-F4F3548BE3A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +77,10 @@ Global
 		{478669F1-A675-4E39-9111-273923359B29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{478669F1-A675-4E39-9111-273923359B29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{478669F1-A675-4E39-9111-273923359B29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E70C277-D614-4EDF-9DDC-F4F3548BE3A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E70C277-D614-4EDF-9DDC-F4F3548BE3A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E70C277-D614-4EDF-9DDC-F4F3548BE3A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E70C277-D614-4EDF-9DDC-F4F3548BE3A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,6 +95,7 @@ Global
 		{93967EE3-C6AC-422A-914A-6555CB75153E} = {80DC0941-8749-4881-9174-94B0C6A11757}
 		{E1EE9803-A983-47C1-AD13-9D9B30CCE4A9} = {80DC0941-8749-4881-9174-94B0C6A11757}
 		{478669F1-A675-4E39-9111-273923359B29} = {80DC0941-8749-4881-9174-94B0C6A11757}
+		{7E70C277-D614-4EDF-9DDC-F4F3548BE3A6} = {43D26106-0705-4E89-AB90-1BD5CB6C7E6D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {530FCB40-1A7B-437A-81C3-C4CD893D00F4}

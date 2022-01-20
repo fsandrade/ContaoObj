@@ -3,6 +3,7 @@ using ContaObj.Application.Interfaces;
 using ContaObj.Domain.Model;
 using ContaObj.Domain.ViewModel;
 using ContaObj.Domain.ViewModel.Conta;
+using ContaObj.Domain.ViewModel.Transacao;
 
 namespace ContaObj.Application.Managers
 {
@@ -22,7 +23,7 @@ namespace ContaObj.Application.Managers
             return contaRepository.DepositarAsync(deposito);
         }
 
-        public Task<IEnumerable<TransacaoViewModel>> ExtratoPorPeriodoAsync(int contaId, DateTime inicio, DateTime fim)
+        public Task<IEnumerable<NovaTransacao>> ExtratoPorPeriodoAsync(int contaId, DateTime inicio, DateTime fim)
         {
             throw new NotImplementedException();
         }

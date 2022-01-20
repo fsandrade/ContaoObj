@@ -24,7 +24,7 @@ public class ContaRepository : IContaRepository
             throw new ApplicationException("Conta não encontrada");
         }
 
-        contaConsultada.Depositar(deposito.Valor);
+        contaConsultada.CreditaSaldo(deposito.Valor);
 
         //TODO criar nova transação
 
@@ -109,7 +109,7 @@ public class ContaRepository : IContaRepository
         }
 
         //TODO criar nova transação
-        contaConsultada.Sacar(saque.Valor);
+        contaConsultada.DebitaSaldo(saque.Valor);
 
         await context.SaveChangesAsync();
     }
