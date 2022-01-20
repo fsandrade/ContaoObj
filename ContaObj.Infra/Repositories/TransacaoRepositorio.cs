@@ -41,7 +41,7 @@ public class TransacaoRepositorio : ITransacaoRepositorio
                                     .Include(p => p.Destino)
                                     .FirstOrDefaultAsync(p => p.Id == transacao.Id);
         if (_transacao == null) throw new TransacaoInvalidaException("Transação não existente");
-        //ValidaSaldoContaOrigem(_transacao);
+
         _transacao.Efetivar();
         await context.SaveChangesAsync();
         return _transacao;

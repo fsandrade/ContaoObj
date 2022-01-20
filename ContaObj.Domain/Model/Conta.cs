@@ -1,4 +1,5 @@
 ﻿using ContaObj.Domain.Enumerations;
+using ContaObj.Domain.Exceptions;
 
 namespace ContaObj.Domain.Model;
 
@@ -20,6 +21,7 @@ public class Conta
 
     public void DebitaSaldo(decimal valor)
     {
+        if (valor > Saldo + Limite) throw new TransacaoInvalidaException("Saldo insuficiente.");
         Saldo -= valor;
     }
 
