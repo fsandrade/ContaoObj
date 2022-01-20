@@ -18,9 +18,9 @@ namespace ContaObj.Application.Managers
             this.mapper = mapper;
         }
 
-        public Task DepositarAsync(OperacaoPropriaConta deposito)
+        public async Task DepositarAsync(OperacaoPropriaConta deposito)
         {
-            return contaRepository.DepositarAsync(deposito);
+            await contaRepository.DepositarAsync(deposito);
         }
 
         public Task<IEnumerable<NovaTransacao>> ExtratoPorPeriodoAsync(int contaId, DateTime inicio, DateTime fim)
