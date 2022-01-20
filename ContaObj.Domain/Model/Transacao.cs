@@ -1,4 +1,5 @@
 ﻿using ContaObj.Domain.Enumerations;
+using ContaObj.Domain.Exceptions;
 
 namespace ContaObj.Domain.Model;
 
@@ -15,9 +16,9 @@ public class Transacao
 
     public void Efetivar()
     {
-        if (Origem == null) throw new ApplicationException("Conta de origem precisa ser definida.");
+        if (Origem == null) throw new TransacaoInvalidaException("Conta de origem precisa ser definida.");
         Origem.DebitaSaldo(Valor);
-        if (Destino == null) throw new ApplicationException("Conta de destino precisa ser definida.");
+        if (Destino == null) throw new TransacaoInvalidaException("Conta de destino precisa ser definida.");
         Destino.CreditaSaldo(Valor);
         Status = StatusTransacao.Concluida;
     }

@@ -1,7 +1,8 @@
 ﻿using ContaObj.Application.Interfaces;
+using ContaObj.Domain.Exceptions;
 using ContaObj.Domain.Model;
-using ContaObj.Domain.ViewModel.Transacao;
 using ContaObj.Infra.Database;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace ContaObj.Infra.Repositories;
@@ -15,54 +16,48 @@ public class TransacaoRepositorio : ITransacaoRepositorio
         this.context = context;
     }
 
-    public async Task<RetornoTransacao> CriaTransacaoAsync(Transacao transacao)
+    public async Task<Transacao> CriaTransacaoAsync(Transacao transacao)
     {
-        var _transacao = await context.Transacoes
-            .Include(p => p.Origem)
-            .Include(p => p.Destino)
-            .FirstOrDefaultAsync(p => p.Id == transacao.Id);
-        if (_transacao != null)
+        try
         {
-            return new RetornoTransacao(false, _transacao);
+            await context.Transacoes.AddAsync(transacao);
+            await context.SaveChangesAsync();
+            return transacao;
         }
-
-        var contas = await ValidaContas(transacao);
-        ValidaSaldo(contas.Item1, transacao.Valor);
-        transacao.Origem = contas.Item1;
-        transacao.Destino = contas.Item2;
-
-        await context.Transacoes.AddAsync(transacao);
-        await context.SaveChangesAsync();
-        return new RetornoTransacao(true, transacao);
+        catch (DbUpdateException ex)
+        {
+            if (ex.InnerException?.InnerException is SqlException innerException && (innerException.Number == 2627 || innerException.Number == 2601))
+            {
+                throw new TransacaoInvalidaException("Transação já existente");
+            }
+            throw;
+        }
     }
 
     public async Task<Transacao> EfetivaDocAsync(Transacao transacao)
     {
-        var _transacao = await context.Transacoes.FindAsync(transacao.Id);
-        if (_transacao == null) throw new ApplicationException("Transacao não existente");
-
-        var contas = await ValidaContas(transacao);
-        ValidaSaldo(contas.Item1, transacao.Valor);
-
-        _transacao.Origem = contas.Item1;
-        _transacao.Destino = contas.Item2;
+        var _transacao = await context.Transacoes
+                                    .Include(p => p.Origem)
+                                    .Include(p => p.Destino)
+                                    .FirstOrDefaultAsync(p => p.Id == transacao.Id);
+        if (_transacao == null) throw new TransacaoInvalidaException("Transação não existente");
+        //ValidaSaldoContaOrigem(_transacao);
         _transacao.Efetivar();
         await context.SaveChangesAsync();
         return _transacao;
     }
 
-    private async Task<Tuple<Conta, Conta>> ValidaContas(Transacao transacao)
+    public async Task AtribuiContas(Transacao transacao)
     {
-        var contaOrigem = await context.Contas.FindAsync(transacao.Origem.Id);
-        if (contaOrigem == null) throw new ApplicationException("Conta de origem inexistente.");
-        var contaDestino = await context.Contas.FindAsync(transacao.Destino.Id);
-        if (contaDestino == null) throw new ApplicationException("Conta destino inexistente.");
-
-        return new Tuple<Conta, Conta>(contaOrigem, contaDestino);
+        transacao.Origem = await context.Contas.FindAsync(transacao?.Origem?.Id);
+        transacao.Destino = await context.Contas.FindAsync(transacao?.Destino?.Id);
     }
 
-    private static void ValidaSaldo(Conta conta, decimal valor)
+    public async Task<Transacao> ConsultaTransacaoExistenteAscyn(Guid id)
     {
-        if (!conta.PossuiSaldoParaTransacao(valor)) throw new ApplicationException("Saldo insuficiente.");
+        return await context.Transacoes
+                            .Include(p => p.Origem)
+                            .Include(p => p.Destino)
+                            .FirstAsync(p => p.Id == id);
     }
 }

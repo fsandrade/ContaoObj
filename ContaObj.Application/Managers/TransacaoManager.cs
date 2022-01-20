@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using ContaObj.Application.Interfaces;
+using ContaObj.Domain.Exceptions;
 using ContaObj.Domain.Model;
-using ContaObj.Domain.ViewModel.Transacao;
 
 namespace ContaObj.Application.Managers;
 
@@ -18,14 +18,32 @@ public class TransacaoManager : ITransacaoManager
         this.repositorio = repositorio;
     }
 
-    public async Task<TransacaoViewModel> TranferirAsync(NovaTransacao transacao)
+    public async Task<Transacao> TranferirAsync(Transacao transacao)
     {
-        var _transacao = mapper.Map<Transacao>(transacao);
-        var transacaoRetornada = await repositorio.CriaTransacaoAsync(_transacao);
-        if (transacaoRetornada.NovaTransacao)
+        await repositorio.AtribuiContas(transacao);
+        ValidaSaldoContaOrigem(transacao);
+        Transacao transacaoRetornada;
+        try
         {
-            producer.EnviaTransacaoParaFila(_transacao);
+            transacaoRetornada = await repositorio.CriaTransacaoAsync(transacao);
         }
-        return await Task.FromResult(mapper.Map<TransacaoViewModel>(transacaoRetornada.Transacao));
+        catch (TransacaoInvalidaException ex) when (ex.Message == "Transação já existente")
+        {
+            return await repositorio.ConsultaTransacaoExistenteAscyn(transacao.Id);
+        }
+
+        producer.EnviaTransacaoParaFila(transacaoRetornada);
+
+        return await Task.FromResult(transacaoRetornada);
+    }
+
+    private static void ValidaSaldoContaOrigem(Transacao transacao)
+    {
+        if (transacao.Origem == null) throw new TransacaoInvalidaException("Conta origem inválida.");
+
+        if (!transacao.Origem.PossuiSaldoParaTransacao(transacao.Valor))
+        {
+            throw new TransacaoInvalidaException("Saldo insuficiente.");
+        }
     }
 }

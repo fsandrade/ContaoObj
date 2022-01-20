@@ -1,4 +1,6 @@
-﻿using ContaObj.Application.Interfaces;
+﻿using AutoMapper;
+using ContaObj.Application.Interfaces;
+using ContaObj.Domain.Exceptions;
 using ContaObj.Domain.Model;
 using ContaObj.Domain.ViewModel.Transacao;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +14,12 @@ namespace ContaObj.Api.Controllers
     public class TransacoesController : ControllerBase
     {
         private readonly ITransacaoManager manager;
+        private readonly IMapper mapper;
 
-        public TransacoesController(ITransacaoManager manager)
+        public TransacoesController(ITransacaoManager manager, IMapper mapper)
         {
             this.manager = manager;
+            this.mapper = mapper;
         }
 
         [HttpGet]
@@ -34,8 +38,16 @@ namespace ContaObj.Api.Controllers
         [ProducesResponseType(typeof(Transacao), StatusCodes.Status202Accepted)]
         public async Task<ActionResult<TransacaoViewModel>> Post(NovaTransacao transacao)
         {
-            var transacaoAceita = await manager.TranferirAsync(transacao);
-            return Accepted(transacaoAceita);
+            Transacao transacaoAceita;
+            try
+            {
+                transacaoAceita = await manager.TranferirAsync(mapper.Map<Transacao>(transacao));
+            }
+            catch (TransacaoInvalidaException ex)
+            {
+                return BadRequest(new { Mensagem = ex.Message });
+            }
+            return Accepted(mapper.Map<TransacaoViewModel>(transacaoAceita));
         }
 
         [HttpPut("{id}")]
