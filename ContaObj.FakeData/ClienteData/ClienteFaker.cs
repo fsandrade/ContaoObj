@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using Bogus.Extensions.Brazil;
 using ContaObj.Domain.Model;
+using ContaObj.FakeData.ContaData;
 using ContaObj.FakeData.EnderecoData;
 using ContaObj.FakeData.TelefoneData;
 
@@ -19,6 +20,7 @@ namespace ContaObj.FakeData.ClienteData
             RuleFor(p => p.Documento, f => f.Person.Cpf());
             RuleFor(p => p.Telefones, f => GenerateUniqueIdPhoneNumbers(3));
             RuleFor(p => p.Endereco, f => new EnderecoFaker().Generate());
+            RuleFor(p => p.Contas, f => new ContaFaker().Generate(2));
         }
 
         private List<Telefone> GenerateUniqueIdPhoneNumbers(int quantity)
