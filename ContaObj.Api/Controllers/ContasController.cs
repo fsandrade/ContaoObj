@@ -1,5 +1,4 @@
 ﻿using ContaObj.Application.Interfaces;
-using ContaObj.Domain.Enumerations;
 using ContaObj.Domain.ViewModel;
 using ContaObj.Domain.ViewModel.Conta;
 using ContaObj.Domain.ViewModel.Transacao;
