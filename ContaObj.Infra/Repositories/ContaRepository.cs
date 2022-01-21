@@ -33,6 +33,10 @@ public class ContaRepository : IContaRepository
 
     public async Task<IEnumerable<Transacao>> ExtratoPorPeriodoAsync(int contaId, DateTime inicio, DateTime fim)
     {
+        if (inicio > DateTime.Now) throw new ApplicationException("Período inicial não pode ser superior ao da data atual");
+
+        if (fim > DateTime.Now) throw new ApplicationException("Período final não pode ser superior ao da data atual");
+
         return await context.Transacoes
             .Where(x => (x.Origem.Id == contaId || x.Destino.Id == contaId) && x.Data.Date >= inicio && x.Data.Date <= fim)
             .ToListAsync();
