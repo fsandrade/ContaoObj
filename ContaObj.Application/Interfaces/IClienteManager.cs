@@ -1,18 +1,18 @@
-﻿using ContaObj.Domain.ViewModel;
+﻿using ContaObj.Domain.Model;
 
 namespace ContaObj.Application.Interfaces;
 
 public interface IClienteManager
 {
-    Task<ClienteViewModel?> GetClienteAsync(int id);
+    Task<Cliente?> GetClienteAsync(int id);
 
-    Task<IEnumerable<ClienteViewModel>> GetClientesAsync();
+    Task<IEnumerable<Cliente>> GetClientesAsync();
 
-    Task<ClienteViewModel?> InativarClienteAsync(int clienteId);
+    Task<Cliente?> InativarClienteAsync(int clienteId);
 
-    Task<ClienteViewModel> InsertClienteAsync(NovoCliente novoCliente);
+    Task<Cliente> InsertClienteAsync(Cliente novoCliente);
 
-    Task<ClienteViewModel?> UpdateClienteAsync(AlteraCliente alteraCliente);
+    Task<Cliente?> UpdateClienteAsync(Cliente alteraCliente);
 
-    Task<IEnumerable<ContaViewModel>> GetContasPorClienteAsync(int clienteId);
+    Task<IEnumerable<Conta>> GetContasPorClienteAsync(int clienteId);
 }

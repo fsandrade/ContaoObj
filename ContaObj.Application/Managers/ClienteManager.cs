@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using ContaObj.Application.Interfaces;
-using ContaObj.Domain.ViewModel;
+﻿using ContaObj.Application.Interfaces;
 using ContaObj.Domain.Model;
 
 namespace ContaObj.Application.Managers;
@@ -8,49 +6,39 @@ namespace ContaObj.Application.Managers;
 public class ClienteManager : IClienteManager
 {
     private readonly IClienteRepository clienteRepository;
-    private readonly IMapper mapper;
 
-    public ClienteManager(IClienteRepository clienteRepository, IMapper mapper)
+    public ClienteManager(IClienteRepository clienteRepository)
     {
         this.clienteRepository = clienteRepository;
-        this.mapper = mapper;
     }
 
-    public async Task<IEnumerable<ClienteViewModel>> GetClientesAsync()
+    public async Task<IEnumerable<Cliente>> GetClientesAsync()
     {
-        var clientes = await clienteRepository.GetClientesAsync();
-        return mapper.Map<IEnumerable<Cliente>, IEnumerable<ClienteViewModel>>(clientes);
+        return await clienteRepository.GetClientesAsync();
     }
 
-    public async Task<ClienteViewModel?> GetClienteAsync(int id)
+    public async Task<Cliente?> GetClienteAsync(int id)
     {
-        var cliente = await clienteRepository.GetClienteAsync(id);
-        return mapper.Map<ClienteViewModel>(cliente);
+        return await clienteRepository.GetClienteAsync(id);
     }
 
-    public async Task<ClienteViewModel> InsertClienteAsync(NovoCliente novoCliente)
+    public async Task<Cliente> InsertClienteAsync(Cliente novoCliente)
     {
-        var cliente = mapper.Map<Cliente>(novoCliente);
-        cliente = await clienteRepository.InsertClienteAsync(cliente);
-        return mapper.Map<ClienteViewModel>(cliente);
+        return await clienteRepository.InsertClienteAsync(novoCliente);
     }
 
-    public async Task<ClienteViewModel?> UpdateClienteAsync(AlteraCliente alteraCliente)
+    public async Task<Cliente?> UpdateClienteAsync(Cliente alteraCliente)
     {
-        var cliente = mapper.Map<Cliente>(alteraCliente);
-        cliente = await clienteRepository.UpdateClienteAsync(cliente);
-        return mapper.Map<ClienteViewModel>(cliente);
+        return await clienteRepository.UpdateClienteAsync(alteraCliente);
     }
 
-    public async Task<ClienteViewModel?> InativarClienteAsync(int clienteId)
+    public async Task<Cliente?> InativarClienteAsync(int clienteId)
     {
-        var cliente = await clienteRepository.InativarClienteAsync(clienteId);
-        return mapper.Map<ClienteViewModel>(cliente);
+        return await clienteRepository.InativarClienteAsync(clienteId);
     }
 
-    public async Task<IEnumerable<ContaViewModel>> GetContasPorClienteAsync(int clienteId)
+    public async Task<IEnumerable<Conta>> GetContasPorClienteAsync(int clienteId)
     {
-        var contas = await clienteRepository.GetContasPorClienteAsync(clienteId);
-        return mapper.Map<IEnumerable<Conta>, IEnumerable<ContaViewModel>>(contas);
+        return await clienteRepository.GetContasPorClienteAsync(clienteId);
     }
 }
