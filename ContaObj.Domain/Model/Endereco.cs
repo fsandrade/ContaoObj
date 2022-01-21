@@ -10,4 +10,9 @@ public class Endereco
         Id = endereco.Id;
         Cep = endereco.Cep; 
     }
+
+    public Endereco Clone()
+    {
+        return (Endereco)MemberwiseClone();
+    }
 }

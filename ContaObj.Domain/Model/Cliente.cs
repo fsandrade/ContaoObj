@@ -26,4 +26,24 @@ public class Cliente
     {
         Telefones = telefones;
     }
+
+    public object Clone()
+    {
+        var cliente = (Cliente)MemberwiseClone();
+        cliente.Endereco = cliente.Endereco.Clone();
+
+        var telefones = new List<Telefone>();
+        cliente.Telefones.ToList().ForEach(t => telefones.Add(t.Clone()));
+
+        var contas = new List<Conta>();
+        cliente.Contas.ToList().ForEach(c => contas.Add(c.Clone()));
+
+        cliente.Telefones = telefones;
+        return cliente;
+    }
+
+    public Cliente CloneTipado()
+    {
+        return (Cliente)Clone();
+    }
 }
