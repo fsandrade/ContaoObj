@@ -57,9 +57,9 @@ namespace ContaObj.Application.Managers
             return mapper.Map<ContaViewModel>(conta);
         }
 
-        public Task SacarAsync(OperacaoPropriaConta saque)
+        public async Task SacarAsync(OperacaoPropriaConta saque)
         {
-            return contaRepository.SacarAsync(saque);
+            await contaRepository.SacarAsync(saque);
         }
 
         public Task AlteraLimiteContaAsync(int contaId, decimal novoLimite)
