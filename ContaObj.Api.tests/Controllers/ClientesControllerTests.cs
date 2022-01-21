@@ -1,5 +1,8 @@
-﻿using ContaObj.Api.Controllers;
+﻿using AutoMapper;
+using ContaObj.Api.Controllers;
 using ContaObj.Application.Interfaces;
+using ContaObj.Application.Mappings;
+using ContaObj.Domain.Model;
 using ContaObj.Domain.ViewModel;
 using ContaObj.FakeData.ClienteData;
 using FluentAssertions;
@@ -15,19 +18,21 @@ namespace ContaObj.Api.tests.Controllers;
 public class ClientesControllerTests
 {
     private readonly IClienteManager clienteManager;
+    private readonly IMapper mapper;
     private readonly ClientesController controller;
-    private readonly ClienteViewModel clienteViewModel;
-    private readonly List<ClienteViewModel> clientesViewModel;
+    private readonly Cliente cliente;
+    private readonly List<Cliente> clientes;
     private readonly NovoCliente novoCliente;
     private readonly AlteraCliente alteraCliente;
 
     public ClientesControllerTests()
     {
         clienteManager = Substitute.For<IClienteManager>();
-        controller = new ClientesController(clienteManager);
+        mapper = new MapperConfiguration(p => p.AddProfile<ClienteViewModelMappingProfile>()).CreateMapper();
+        controller = new ClientesController(clienteManager, mapper);
 
-        clienteViewModel = new ClienteViewModelFaker().Generate();
-        clientesViewModel = new ClienteViewModelFaker().Generate(10);
+        cliente = new ClienteFaker().Generate();
+        clientes = new ClienteFaker().Generate(10);
         novoCliente = new NovoClienteFaker().Generate();
         alteraCliente = new AlteraClienteFaker().Generate();
     }
@@ -35,22 +40,20 @@ public class ClientesControllerTests
     [Fact]
     public async Task Get_Ok()
     {
-        var listaCliente = new List<ClienteViewModel>();
-        clientesViewModel.ForEach(p => listaCliente.Add(p.CloneTipado()));
-
-        clienteManager.GetClientesAsync().Returns(clientesViewModel);
+        clienteManager.GetClientesAsync().Returns(clientes);
+        var clientesMapeados = mapper.Map<IEnumerable<Cliente>, IEnumerable<ClienteViewModel>>(clientes);
 
         var resultado = await controller.Get();
 
         await clienteManager.Received().GetClientesAsync();
         resultado.Result.Should().BeOfType(typeof(OkObjectResult));
-        ((ObjectResult)resultado.Result).Value.Should().BeEquivalentTo(clientesViewModel);
+        ((ObjectResult)resultado.Result).Value.Should().BeEquivalentTo(clientesMapeados);
     }
 
     [Fact]
     public async Task Get_NotFound()
     {
-        clienteManager.GetClientesAsync().Returns(new List<ClienteViewModel>());
+        clienteManager.GetClientesAsync().Returns(new List<Cliente>());
 
         var resultado = await controller.Get();
 
@@ -61,12 +64,13 @@ public class ClientesControllerTests
     [Fact]
     public async Task GetById_Ok()
     {
-        clienteManager.GetClienteAsync(Arg.Any<int>()).Returns(clienteViewModel.CloneTipado());
+        var clienteMapeado = mapper.Map<ClienteViewModel>(cliente);
+        clienteManager.GetClienteAsync(Arg.Any<int>()).Returns(cliente);
 
-        var resultado = await controller.Get(clienteViewModel.Id);
+        var resultado = await controller.Get(cliente.Id);
 
         await clienteManager.Received().GetClienteAsync(Arg.Any<int>());
-        ((ObjectResult)resultado.Result).Value.Should().BeEquivalentTo(clienteViewModel);
+        ((ObjectResult)resultado.Result).Value.Should().BeEquivalentTo(clienteMapeado);
         resultado.Result.Should().BeOfType(typeof(OkObjectResult));
     }
 
@@ -84,31 +88,32 @@ public class ClientesControllerTests
     [Fact]
     public async Task Post_Created()
     {
-        clienteManager.InsertClienteAsync(Arg.Any<NovoCliente>()).Returns(clienteViewModel.CloneTipado());
+        var clienteMapeado = mapper.Map<ClienteViewModel>(cliente);
+        clienteManager.InsertClienteAsync(Arg.Any<Cliente>()).Returns(cliente);
 
         var resultado = await controller.Post(novoCliente);
 
-        await clienteManager.Received().InsertClienteAsync(Arg.Any<NovoCliente>());
+        await clienteManager.Received().InsertClienteAsync(Arg.Any<Cliente>());
         resultado.Result.Should().BeOfType(typeof(CreatedAtActionResult));
-        ((ObjectResult)resultado.Result).Value.Should().BeEquivalentTo(clienteViewModel);
+        ((ObjectResult)resultado.Result).Value.Should().BeEquivalentTo(clienteMapeado);
     }
 
     [Fact]
     public async Task Put_Ok()
     {
-        clienteManager.UpdateClienteAsync(Arg.Any<AlteraCliente>()).Returns(clienteViewModel.CloneTipado());
+        clienteManager.UpdateClienteAsync(Arg.Any<Cliente>()).Returns(cliente);
 
         var resultado = await controller.Put(alteraCliente.Id, alteraCliente);
 
-        await clienteManager.Received().UpdateClienteAsync(Arg.Any<AlteraCliente>());
+        await clienteManager.Received().UpdateClienteAsync(Arg.Any<Cliente>());
         resultado.Result.Should().BeOfType(typeof(OkObjectResult));
-        ((ObjectResult)resultado.Result).Value.Should().BeEquivalentTo(clienteViewModel);
+        ((ObjectResult)resultado.Result).Value.Should().BeEquivalentTo(cliente);
     }
 
     [Fact]
     public async Task Put_BadRequest()
     {
-        clienteManager.UpdateClienteAsync(Arg.Any<AlteraCliente>()).ReturnsNull();
+        clienteManager.UpdateClienteAsync(Arg.Any<Cliente>()).ReturnsNull();
 
         var resultado = await controller.Put(alteraCliente.Id + 1, alteraCliente);
 
@@ -118,20 +123,20 @@ public class ClientesControllerTests
     [Fact]
     public async Task Put_NotFound()
     {
-        clienteManager.UpdateClienteAsync(Arg.Any<AlteraCliente>()).ReturnsNull();
+        clienteManager.UpdateClienteAsync(Arg.Any<Cliente>()).ReturnsNull();
 
         var resultado = await controller.Put(alteraCliente.Id, alteraCliente);
 
-        await clienteManager.Received().UpdateClienteAsync(Arg.Any<AlteraCliente>());
+        await clienteManager.Received().UpdateClienteAsync(Arg.Any<Cliente>());
         resultado.Result.Should().BeOfType(typeof(NotFoundResult));
     }
 
     [Fact]
     public async Task Delete_NoContent()
     {
-        clienteManager.InativarClienteAsync(Arg.Any<int>()).Returns(clienteViewModel);
+        clienteManager.InativarClienteAsync(Arg.Any<int>()).Returns(cliente);
 
-        var resultado = await controller.Delete(clienteViewModel.Id);
+        var resultado = await controller.Delete(cliente.Id);
 
         await clienteManager.Received().InativarClienteAsync(Arg.Any<int>());
         resultado.Should().BeOfType(typeof(NoContentResult));
@@ -140,9 +145,9 @@ public class ClientesControllerTests
     [Fact]
     public async Task Delete_NotFound()
     {
-        clienteManager.InativarClienteAsync(clienteViewModel.Id).ReturnsNull();
+        clienteManager.InativarClienteAsync(cliente.Id).ReturnsNull();
 
-        var resultado = await controller.Delete(clienteViewModel.Id);
+        var resultado = await controller.Delete(cliente.Id);
 
         await clienteManager.Received().InativarClienteAsync(Arg.Any<int>());
         resultado.Should().BeOfType(typeof(NotFoundResult));
