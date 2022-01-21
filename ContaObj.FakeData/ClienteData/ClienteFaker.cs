@@ -20,7 +20,6 @@ namespace ContaObj.FakeData.ClienteData
             RuleFor(p => p.Documento, f => f.Person.Cpf());
             RuleFor(p => p.Telefones, f => GenerateUniqueIdPhoneNumbers(3));
             RuleFor(p => p.Endereco, f => new EnderecoFaker().Generate());
-            RuleFor(p => p.Contas, f => new ContaFaker().Generate(2));
         }
 
         private List<Telefone> GenerateUniqueIdPhoneNumbers(int quantity)
