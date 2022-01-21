@@ -92,14 +92,6 @@ namespace ContaObj.Infra.Tests.Repositories
         }
 
         [Fact]
-        public async Task InsertClienteAsync_RepositorioVazio_RetornaNulo()
-        {
-            var retorno = await repository.GetClienteAsync(1);
-
-            retorno.Should().BeNull();
-        }
-
-        [Fact]
         public async Task UpdateClienteAsync_Sucesso()
         {
             var registros = await InsertRecords();
