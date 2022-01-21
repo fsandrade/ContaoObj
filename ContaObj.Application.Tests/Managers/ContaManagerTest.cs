@@ -30,7 +30,7 @@ namespace ContaObj.Application.Tests.Managers
         public ContaManagerTest()
         {
             repository = Substitute.For<IContaRepository>();
-            mapper = new MapperConfiguration(p => p.AddProfile<ContaViewModelMappingProfile>()).CreateMapper();
+            mapper = new MapperConfiguration(p => p.AddProfile<TransacaoMappingProfile>()).CreateMapper();
             manager = new ContaManager(repository, mapper);
 
             contaFaker = new ContaFaker();
