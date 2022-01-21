@@ -25,7 +25,7 @@ namespace ContaObj.Infra.Tests.Repositories
         public ClienteRepositoryTest()
         {
             var optionsBuilder = new DbContextOptionsBuilder<ContaObjContext>();
-            optionsBuilder.UseInMemoryDatabase("MemoryDb");
+            optionsBuilder.UseInMemoryDatabase(Guid.NewGuid().ToString());
 
             context = new ContaObjContext(optionsBuilder.Options);
             repository = new ClienteRepository(context);
