@@ -23,9 +23,10 @@ namespace ContaObj.Application.Managers
             return contaRepository.DepositarAsync(deposito);
         }
 
-        public Task<IEnumerable<NovaTransacao>> ExtratoPorPeriodoAsync(int contaId, DateTime inicio, DateTime fim)
+        public async Task<IEnumerable<TransacaoViewModel>> ExtratoPorPeriodoAsync(int contaId, DateTime inicio, DateTime fim)
         {
-            throw new NotImplementedException();
+            var transacoes = await contaRepository.ExtratoPorPeriodoAsync(contaId, inicio, fim);
+            return mapper.Map<IEnumerable<Transacao>, IEnumerable<TransacaoViewModel>>(transacoes);
         }
 
         public async Task<ContaViewModel> GetContaAsync(int contaId)

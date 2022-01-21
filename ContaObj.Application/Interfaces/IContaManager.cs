@@ -8,7 +8,7 @@ public interface IContaManager
 {
     Task DepositarAsync(OperacaoPropriaConta deposito);
 
-    Task<IEnumerable<NovaTransacao>> ExtratoPorPeriodoAsync(int contaId, DateTime inicio, DateTime fim);
+    Task<IEnumerable<TransacaoViewModel>> ExtratoPorPeriodoAsync(int contaId, DateTime inicio, DateTime fim);
 
     Task<ContaViewModel> GetContaAsync(int contaId);
 
