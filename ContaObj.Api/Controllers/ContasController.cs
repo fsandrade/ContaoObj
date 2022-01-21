@@ -26,7 +26,7 @@ public class ContasController : ControllerBase
         {
             await contaManager.DepositarAsync(deposito);
         }
-        catch (ApplicationException ex)
+        catch (ApplicationException)
         {
             return NotFound();
         }
