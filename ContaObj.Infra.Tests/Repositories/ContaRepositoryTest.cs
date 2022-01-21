@@ -22,7 +22,6 @@ namespace ContaObj.Infra.Tests.Repositories
         private readonly IContaRepository repository;
         private readonly ContaObjContext context;
         private readonly ContaFaker contaFaker;
-        private readonly NovaContaFaker novaContaFaker;
         private readonly AgenciaFaker agenciaFaker;
         private readonly ClienteFaker clienteFaker;
 
@@ -35,7 +34,6 @@ namespace ContaObj.Infra.Tests.Repositories
             repository = new ContaRepository(context);
 
             contaFaker = new ContaFaker();
-            novaContaFaker = new NovaContaFaker();
             agenciaFaker = new AgenciaFaker();
             clienteFaker = new ClienteFaker();
         }
@@ -103,23 +101,9 @@ namespace ContaObj.Infra.Tests.Repositories
         }
 
         [Fact]
-        public async Task InsertContaAsync_ClienteInexistente_RetornaNulo()
+        public async Task InsertContaAsync_RepositorioVazio_RetornaNulo()
         {
-            var agencias = await InsereAgencias();
-            var novaConta = contaFaker.Generate();
-            novaConta.Agencia = agencias.First();
-            var retorno = await repository.InsertContaAsync(novaConta);
-
-            retorno.Should().BeNull();
-        }
-
-        [Fact]
-        public async Task InsertContaAsync_AgenciaInexistente_RetornaNulo()
-        {
-            var clientes = await InsereClientes();
-            var novaConta = contaFaker.Generate();
-            novaConta.Cliente = clientes.First();
-            var retorno = await repository.InsertContaAsync(novaConta);
+            var retorno = await repository.GetContaAsync(1);
 
             retorno.Should().BeNull();
         }
@@ -204,38 +188,6 @@ namespace ContaObj.Infra.Tests.Repositories
             .Should()
             .ThrowAsync<ApplicationException>()
             .WithMessage("Conta não encontrada");
-        }
-
-        [Fact]
-        public async Task DepositarAsync_ValorZerado_LancaExcecao()
-        {
-            var registros = await InsereContas();
-            var saldoInicial = registros.First().Saldo;
-            var deposito = new OperacaoPropriaContaFaker(registros.First().Id).Generate();
-            deposito.Valor = 0;
-
-            Func<Task> depositoRealizado = async () => await repository.DepositarAsync(deposito);
-
-            await depositoRealizado
-            .Should()
-            .ThrowAsync<ApplicationException>()
-            .WithMessage("Valor inválido");
-        }
-
-        [Fact]
-        public async Task DepositarAsync_ValorAbaixoDeZero_LancaExcecao()
-        {
-            var registros = await InsereContas();
-            var saldoInicial = registros.First().Saldo;
-            var deposito = new OperacaoPropriaContaFaker(registros.First().Id).Generate();
-            deposito.Valor = -1;
-
-            Func<Task> depositoRealizado = async () => await repository.DepositarAsync(deposito);
-
-            await depositoRealizado
-            .Should()
-            .ThrowAsync<ApplicationException>()
-            .WithMessage("Valor inválido");
         }
 
         [Fact]
@@ -380,34 +332,6 @@ namespace ContaObj.Infra.Tests.Repositories
             var transacoesRegistradas = await repository.ExtratoPorPeriodoAsync(registros.First().Id, dataAtual, dataAtual);
 
             transacoesRegistradas.Count().Should().Be(0);
-        }
-
-        [Fact]
-        public async Task ExtratoPorPeriodoAsync_InicioSuperiorDataAtual_LancaExcecao()
-        {
-            var registros = await InsereContas();
-            var dataAtual = DateTime.Now.Date;
-            var dataTeste = new DateTime(dataAtual.Year, dataAtual.Month, dataAtual.Day + 1);
-
-            Func<Task> act = async () => await repository.ExtratoPorPeriodoAsync(registros.First().Id, dataTeste, dataAtual);
-
-            await act.Should()
-                .ThrowAsync<ApplicationException>()
-                .WithMessage("Período inicial não pode ser superior ao da data atual");
-        }
-
-        [Fact]
-        public async Task ExtratoPorPeriodoAsync_FimSuperiorDataAtual_LancaExcecao()
-        {
-            var registros = await InsereContas();
-            var dataAtual = DateTime.Now.Date;
-            var dataTeste = new DateTime(dataAtual.Year, dataAtual.Month, dataAtual.Day + 1);
-
-            Func<Task> act = async () => await repository.ExtratoPorPeriodoAsync(registros.First().Id, dataAtual, dataTeste);
-
-            await act.Should()
-                .ThrowAsync<ApplicationException>()
-                .WithMessage("Período final não pode ser superior ao da data atual");
         }
 
         public void Dispose()

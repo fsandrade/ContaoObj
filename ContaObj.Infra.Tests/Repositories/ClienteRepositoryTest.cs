@@ -86,8 +86,6 @@ namespace ContaObj.Infra.Tests.Repositories
         {
             var retorno = await repository.InsertClienteAsync(cliente);
 
-            //TODO clone cliente
-
             retorno.Should().BeEquivalentTo(cliente);
         }
 

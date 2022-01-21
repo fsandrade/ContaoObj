@@ -9,10 +9,5 @@ namespace ContaObj.Domain.ViewModel.Conta
         /// </summary>
         /// <example>10.00M</example>
         public decimal Valor { get; set; }
-
-        public bool PossuiValorValido()
-        {
-            return Valor > 0;
-        }
     }
 }
