@@ -24,6 +24,11 @@ public class ContaRepository : IContaRepository
             throw new ApplicationException("Conta não encontrada");
         }
 
+        if(deposito.Valor <= 0)
+        {
+            throw new ApplicationException("Valor inválido");
+        }
+
         contaConsultada.CreditaSaldo(deposito.Valor);
 
         //TODO criar nova transação
