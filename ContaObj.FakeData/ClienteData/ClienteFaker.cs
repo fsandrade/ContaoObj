@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using Bogus.Extensions.Brazil;
 using ContaObj.Domain.Model;
+using ContaObj.FakeData.ContaData;
 using ContaObj.FakeData.EnderecoData;
 using ContaObj.FakeData.TelefoneData;
 

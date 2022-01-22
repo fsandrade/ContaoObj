@@ -25,7 +25,7 @@ namespace ContaObj.Infra.Tests.Repositories
         public ClienteRepositoryTest()
         {
             var optionsBuilder = new DbContextOptionsBuilder<ContaObjContext>();
-            optionsBuilder.UseInMemoryDatabase("MemoryDb");
+            optionsBuilder.UseInMemoryDatabase(Guid.NewGuid().ToString());
 
             context = new ContaObjContext(optionsBuilder.Options);
             repository = new ClienteRepository(context);
@@ -89,14 +89,6 @@ namespace ContaObj.Infra.Tests.Repositories
             //TODO clone cliente
 
             retorno.Should().BeEquivalentTo(cliente);
-        }
-
-        [Fact]
-        public async Task InsertClienteAsync_RepositorioVazio_RetornaNulo()
-        {
-            var retorno = await repository.GetClienteAsync(1);
-
-            retorno.Should().BeNull();
         }
 
         [Fact]

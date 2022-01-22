@@ -1,4 +1,6 @@
-﻿using ContaObj.Application.Interfaces;
+﻿using AutoMapper;
+using ContaObj.Application.Interfaces;
+using ContaObj.Domain.Model;
 using ContaObj.Domain.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -10,10 +12,12 @@ namespace ContaObj.Api.Controllers;
 public class ClientesController : ControllerBase
 {
     private readonly IClienteManager clienteManager;
+    private readonly IMapper mapper;
 
-    public ClientesController(IClienteManager clienteManager)
+    public ClientesController(IClienteManager clienteManager, IMapper mapper)
     {
         this.clienteManager = clienteManager;
+        this.mapper = mapper;
     }
 
     [SwaggerOperation(Summary = "Retorna todos os clientes")]
@@ -27,7 +31,7 @@ public class ClientesController : ControllerBase
             return NotFound();
         }
 
-        return Ok(clientes);
+        return Ok(mapper.Map<IEnumerable<Cliente>, IEnumerable<ClienteViewModel>>(clientes));
     }
 
     [SwaggerOperation(Summary = "Retorna cliente pelo id")]
@@ -41,14 +45,17 @@ public class ClientesController : ControllerBase
             return NotFound();
         }
 
-        return Ok(cliente);
+        return Ok(mapper.Map<ClienteViewModel>(cliente));
     }
 
     [SwaggerOperation(Summary = "Insere novo cliente")]
     [HttpPost]
     public async Task<ActionResult<ClienteViewModel>> Post([SwaggerParameter("Cliente para inserção")] NovoCliente novoCliente)
     {
-        ClienteViewModel clienteInserido = await clienteManager.InsertClienteAsync(novoCliente);
+        var cliente = mapper.Map<Cliente>(novoCliente);
+
+        ClienteViewModel clienteInserido = mapper.Map<ClienteViewModel>(await clienteManager.InsertClienteAsync(cliente));
+
         return CreatedAtAction(nameof(Get), new { id = clienteInserido.Id }, clienteInserido);
     }
 
@@ -66,7 +73,10 @@ public class ClientesController : ControllerBase
                     Detail = "O Id informado no path é diferente do Id informado no body."
                 });
         }
-        var clienteAlterado = await clienteManager.UpdateClienteAsync(alteraCliente);
+
+        var cliente = mapper.Map<Cliente>(alteraCliente);
+
+        var clienteAlterado = await clienteManager.UpdateClienteAsync(cliente);
 
         if (clienteAlterado == null)
         {
@@ -101,6 +111,6 @@ public class ClientesController : ControllerBase
             return NotFound();
         }
 
-        return Ok(contasDoCliente);
+        return Ok(mapper.Map<IEnumerable<Conta>, IEnumerable<ContaViewModel>>(contasDoCliente));
     }
 }

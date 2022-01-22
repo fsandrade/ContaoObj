@@ -4,9 +4,10 @@ using ContaObj.Application.Managers;
 using ContaObj.Application.Mappings;
 using ContaObj.Domain.Model;
 using ContaObj.Domain.ViewModel;
+using ContaObj.FakeData.AgenciaData;
 using ContaObj.FakeData.ClienteData;
+using ContaObj.FakeData.ContaData;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using System.Collections.Generic;
@@ -18,43 +19,38 @@ namespace ContaObj.Application.Tests.Managers
     public class ClienteManagerTest
     {
         private readonly IClienteRepository repository;
-        private readonly ILogger<ClienteManager> logger;
         private readonly IMapper mapper;
         private readonly IClienteManager manager;
         private readonly Cliente cliente;
-        private readonly NovoCliente novoCliente;
-        private readonly AlteraCliente alteraCliente;
         private readonly ClienteFaker clienteFaker;
-        private readonly NovoClienteFaker novoClienteFaker;
-        private readonly AlteraClienteFaker alteraClienteFaker;
 
         public ClienteManagerTest()
         {
             repository = Substitute.For<IClienteRepository>();
-            logger = Substitute.For<ILogger<ClienteManager>>();
             mapper = new MapperConfiguration(p => p.AddProfile<ClienteViewModelMappingProfile>()).CreateMapper();
-            manager = new ClienteManager(repository, mapper);
+            manager = new ClienteManager(repository);
 
             clienteFaker = new ClienteFaker();
-            novoClienteFaker = new NovoClienteFaker();
-            alteraClienteFaker = new AlteraClienteFaker();
 
             cliente = clienteFaker.Generate();
-            novoCliente = novoClienteFaker.Generate();
-            alteraCliente = alteraClienteFaker.Generate();
         }
 
         [Fact]
         public async Task GetClientesAsync_Sucesso()
         {
+            var agencia = new AgenciaFaker().Generate();
             var listaClientes = clienteFaker.Generate(2);
+            List<Cliente> listaClientesClone = new List<Cliente>();
+            listaClientes.ForEach(c => {
+                c.Contas = new ContaFaker(c, agencia).Generate(2);
+                listaClientesClone.Add(c.CloneTipado());
+            });
             repository.GetClientesAsync().Returns(listaClientes);
-            var listaClientesMapeados = mapper.Map<IEnumerable<Cliente>, IEnumerable<ClienteViewModel>>(listaClientes);
 
             var retorno = await manager.GetClientesAsync();
 
             await repository.Received().GetClientesAsync();
-            retorno.Should().BeEquivalentTo(listaClientesMapeados);
+            retorno.Should().BeEquivalentTo(listaClientesClone);
         }
 
         [Fact]
@@ -80,14 +76,14 @@ namespace ContaObj.Application.Tests.Managers
         }
 
         [Fact]
-        public async Task GetClienteAsync_NaoEncontrado()
+        public async Task GetClienteAsync_NaoEncontrado_RetornaNulo()
         {
-            repository.GetClienteAsync(Arg.Any<int>()).Returns(new Cliente());
-            var clienteMapeado = mapper.Map<ClienteViewModel>(new Cliente());
+            repository.GetClienteAsync(Arg.Any<int>()).ReturnsNull();
+
             var retorno = await manager.GetClienteAsync(cliente.Id);
 
             await repository.Received().GetClienteAsync(Arg.Any<int>());
-            retorno.Should().BeEquivalentTo(clienteMapeado);
+            retorno.Should().BeNull();
         }
 
         [Fact]
@@ -95,7 +91,7 @@ namespace ContaObj.Application.Tests.Managers
         {
             repository.InsertClienteAsync(Arg.Any<Cliente>()).Returns(cliente);
             var controle = mapper.Map<ClienteViewModel>(cliente);
-            var retorno = await manager.InsertClienteAsync(novoCliente);
+            var retorno = await manager.InsertClienteAsync(cliente);
 
             await repository.Received().InsertClienteAsync(Arg.Any<Cliente>());
             retorno.Should().BeEquivalentTo(controle);
@@ -106,7 +102,7 @@ namespace ContaObj.Application.Tests.Managers
         {
             repository.UpdateClienteAsync(Arg.Any<Cliente>()).Returns(cliente);
             var clienteMapeado = mapper.Map<ClienteViewModel>(cliente);
-            var retorno = await manager.UpdateClienteAsync(alteraCliente);
+            var retorno = await manager.UpdateClienteAsync(cliente);
 
             await repository.Received().UpdateClienteAsync(Arg.Any<Cliente>());
             retorno.Should().BeEquivalentTo(clienteMapeado);
@@ -117,7 +113,7 @@ namespace ContaObj.Application.Tests.Managers
         {
             repository.UpdateClienteAsync(Arg.Any<Cliente>()).ReturnsNull();
 
-            var retorno = await manager.UpdateClienteAsync(alteraCliente);
+            var retorno = await manager.UpdateClienteAsync(cliente);
 
             await repository.Received().UpdateClienteAsync(Arg.Any<Cliente>());
             retorno.Should().BeNull();

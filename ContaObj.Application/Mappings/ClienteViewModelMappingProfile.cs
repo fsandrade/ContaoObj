@@ -2,6 +2,7 @@
 using ContaObj.Domain.Enumerations;
 using ContaObj.Domain.Model;
 using ContaObj.Domain.ViewModel;
+using ContaObj.Domain.ViewModel.Endereco;
 
 namespace ContaObj.Application.Mappings;
 
@@ -31,6 +32,8 @@ public class ClienteViewModelMappingProfile : Profile
 
         CreateMap<NovoEndereco, Endereco>()
             .ForMember(d => d.Id, opt => opt.MapFrom(x => 0));
+
+        CreateMap<AlteraEndereco, Endereco>();
 
         CreateMap<Endereco, EnderecoViewModel>();
     }

@@ -7,4 +7,9 @@ public class Telefone
     public string Numero { get; set; }
 
     public Cliente Cliente { get; set; }
+
+    public Telefone Clone()
+    {
+        return (Telefone)MemberwiseClone();
+    }
 }

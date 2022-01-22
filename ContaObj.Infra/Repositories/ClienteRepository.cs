@@ -40,6 +40,7 @@ public class ClienteRepository : IClienteRepository
         var clienteConsultado = await context.Clientes
             .Include(x => x.Telefones)
             .Include(x => x.Endereco)
+            .Include(x => x.Contas)
             .FirstOrDefaultAsync(x => x.Id == cliente.Id);
 
         if (clienteConsultado == null)
@@ -48,8 +49,9 @@ public class ClienteRepository : IClienteRepository
         }
 
         context.Entry(clienteConsultado).CurrentValues.SetValues(cliente);
-        clienteConsultado.Endereco.AlteraEndereco(cliente.Endereco);
-        clienteConsultado.AtualizaTelefones(cliente.Telefones);
+        context.Entry(clienteConsultado.Endereco).CurrentValues.SetValues(cliente.Endereco);
+        clienteConsultado.Telefones = cliente.Telefones;
+
         await context.SaveChangesAsync();
         return cliente;
     }
