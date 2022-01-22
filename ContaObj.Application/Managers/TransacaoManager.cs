@@ -37,6 +37,11 @@ public class TransacaoManager : ITransacaoManager
         return await Task.FromResult(transacaoRetornada);
     }
 
+    public async Task<IEnumerable<Transacao>> ConsultaTransacoesAsync()
+    {
+        return await repositorio.ConsultaTransacoesAsync();
+    }
+
     private static void ValidaSaldoContaOrigem(Transacao transacao)
     {
         if (transacao.Origem == null) throw new TransacaoInvalidaException("Conta origem inválida.");

@@ -11,4 +11,5 @@ public interface ITransacaoRepositorio
     Task<Transacao> EfetivaDocAsync(Transacao transacao);
 
     Task<Transacao> ConsultaTransacaoExistenteAscyn(Guid id);
+    Task<IEnumerable<Transacao>> ConsultaTransacoesAsync();
 }

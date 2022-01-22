@@ -2,18 +2,43 @@
 using ContaObj.Domain.Exceptions;
 using ContaObj.Domain.Model;
 using ContaObj.Infra.Database;
+using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System.Data;
 
 namespace ContaObj.Infra.Repositories;
 
 public class TransacaoRepositorio : ITransacaoRepositorio
 {
     private readonly ContaObjContext context;
+    private readonly IConfiguration configuration;
 
-    public TransacaoRepositorio(ContaObjContext context)
+    public TransacaoRepositorio(ContaObjContext context, IConfiguration configuration)
     {
         this.context = context;
+        this.configuration = configuration;
+    }
+
+    private IDbConnection CriaConexao()
+    {
+        return new SqlConnection(configuration.GetConnectionString("ContaObjDb"));
+    }
+
+    public async Task<IEnumerable<Transacao>> ConsultaTransacoesAsync()
+    {
+        var conexao = CriaConexao();
+        const string sql = "SELECT * FROM dbo.Transacoes";
+        return await conexao.QueryAsync<Transacao>(sql);
+    }
+
+    public async Task<IEnumerable<Transacao>> ConsultaTransacoesAsync(int IdConta)
+    {
+        var conexao = CriaConexao();
+        const string sql = "SELECT * FROM dbo.Transacoes WHERE OrigemId = @IdConta OR DestinoId = @IdConta";
+        var parametros = new { IdConta = IdConta };
+        return await conexao.QueryAsync<Transacao>(sql, parametros);
     }
 
     public async Task<Transacao> CriaTransacaoAsync(Transacao transacao)

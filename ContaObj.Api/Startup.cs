@@ -63,7 +63,7 @@ public class Startup : IStartup
             app.UseDeveloperExceptionPage();
         }
 
-        app.UseHttpsRedirection();
+        //app.UseHttpsRedirection();
 
         app.UseAuthorization();
 

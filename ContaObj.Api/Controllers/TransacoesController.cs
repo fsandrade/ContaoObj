@@ -23,9 +23,9 @@ namespace ContaObj.Api.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<ActionResult<IEnumerable<Transacao>>> GetAsync()
         {
-            return new string[] { "value1", "value2" };
+            return Ok(await manager.ConsultaTransacoesAsync());
         }
 
         [HttpGet("{id}")]
@@ -35,7 +35,7 @@ namespace ContaObj.Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(Transacao), StatusCodes.Status202Accepted)]
+        [ProducesResponseType(typeof(TransacaoViewModel), StatusCodes.Status202Accepted)]
         public async Task<ActionResult<TransacaoViewModel>> Post(NovaTransacao transacao)
         {
             Transacao transacaoAceita;
